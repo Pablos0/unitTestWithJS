@@ -1,20 +1,48 @@
-## JS Automation Framework WDIO 
+# Automated Testing in JavaScript project 🛠️ 🧪
 
-1. Walk through the provided materials (official documentation, video) to understand how WDIO works and the main benefits of the tool.
-2. Create an initial setup of WDIO on the local machine
-3. Create WDIO config if it does not exist and familiarize
-4. Create first specs using the existing BDD scenario created in Module 2
-5. Execute these tests using CLI in different browsers (Chrome, Firefox, Safari) in headless mode
-6. Execute tests in parallel using 2 instances
-7. Add the option to run tests 2 times before marking it as failed
-8. Push the code to remote repository and create Merge Request
+This project is to generate test cases related to page https://practicesoftwaretesting.com/ 
+
+The project has been created as part of Automated Testing in JavaScript program from EPAM campus. 
+
+The project is develop with different frameworks such WDIO and CHAI. The cases to be tested are: 
+
+1. A Customer log in to his account
+2. Customer John log in from his cart
+3. A new Customer registration
+4. Adding products to the shopping cart
+5. Filtering tools
+6. Deleting products from the shopping cart
+7. Adding tools to favorites
+
+## Structure
+
+The tests scenarios are divide in two files called ```shoppingCart1``` and ```customerAccount1``` which are inside Features folder. 
+
+The ```spec.js``` files in the next path ```./test/specs```. There is one file for each Feature file. 
+
+In <b>.gitignore</b> file is just ```node_modules``` folder. In ```wdio.conf.js``` is the required configuration for each test.
+
+## Test Scenario
+### Shopping cart
+
+<b>Adding products to the cart</b>, the user is trying to add "Thor Hammer" to his cart, once the user do click in "add button", the cart icon should change with a number, depending of the amount of products in the cart. 
+
+<b>Filtering Tools</b>, the user is looking for a drill. To do this the user needs to do click in "Categories" option at the top right of the page and select "power tools". Once the tools are display, in the left side there are several options to filter the results, when the user select "drill" chebox, the page should reload within the next 3 seconds.
+
+<b>Deleting products from cart</b>, the user will try to delete his products in his cart. In the right side of the product should be an "X" button. When the user do click, in the top right side should appear the message "Product deleted" and the cart page will be refreshed automatically.
+
+<b>Adding favorites</b>, the user is trying to add a tool to favorite, but he is not allow to do it. When he do click in "Add to favorites", the "Unauthorized, can not add product to your favorite list." message must appears.
+
+### Customer account
+<b>Customer login</b>, the user is trying to log in to his account typing "john@domain.com" as emal and as password "password123", then press enter. But, due the password is incorrect, an  "Invalid email or password" error message must appears.
+
+<b>Customer log in from cart</b>, user do click in the cart icon located in the top right of the page and the click in "Proceed to checkout", when the user do click in login button without any information, the message "Email is required" must be shown. 
+
+<b>Language change</b>, as the user speaks another language, when he do click in th little globe button located in the top right of the page and select his prefered language, the page should be refreshed with the new language.
+
+## Languages and Framework 
 
 
-Assessment criteria (pass rate is 70%)
-Here’s the list of actions which result in reduction of overall mark for a completed task:
-1. WDIO set up with triavial mistatkes (-10%)
-2. Not all scenarios from Module 1 are codded (each test -5%)
-3. Tests are not run in all mentioned browsers (-10%)
-4. Tests are not run in parallel (-5%)
-5. Tests are not run in headless mode (-5%)
-6. Retry to auto rerun test option isn’t added (-5%)
+<img src="./src/images/javascript.png" alt= "webdriverIOicon" width= "35px" height = "35px"><br>
+
+<img src="./src/images/webdriverio.png" alt= "webdriverIOicon" width= "35px" height = "35px"><br>
