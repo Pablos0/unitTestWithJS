@@ -104,5 +104,3 @@ The ```Assert``` allows insert an additional message in the last parameter for b
 Both ```Expect``` and ```Should``` are BDD, the main different between these two are th syntax. ```Should``` function required to be executed. 
 
 ### Page Objects
-
-The page objects files are under constructions...  
