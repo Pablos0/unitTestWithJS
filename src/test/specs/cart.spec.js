@@ -1,7 +1,12 @@
 import { assert, expect } from "chai";
 import MainPage from "../../po/pages/mainpage.page";
+import Cart from "../../po/pages/cart.page";
+import Customer from "../../po/pages/customer.page";
+
 
 const mainPage = new MainPage();
+const cartActions = new Cart();
+const customer = new Customer();
 
 describe('shopping cart', () => {
     beforeEach(async () => {
@@ -9,11 +14,11 @@ describe('shopping cart', () => {
     });
 
     it ("Adding products to cart", async () => {
-        await $('h5[data-test="product-name"]').click();
-        await $('button[data-test="increase-quantity"]').click();
-        await $('button[data-test="add-to-cart"]').click();
+        await mainPage.toolsPage.selectedProduct.click();
+        await cartActions.cartButton.item('plus').click();
+        await cartActions.cartButton.item('add').click();
 
-        const productAdded = await $('#toast-container');
+        const productAdded = await mainPage.toolsPage.productInCart;
         await productAdded.waitForDisplayed({ timeout: 7000 });
 
         const cartUpdated = await productAdded.getText();
@@ -21,11 +26,11 @@ describe('shopping cart', () => {
     }) 
 
     it("Filtering tools", async () => {
-        await $('a.nav-link.dropdown-toggle').click();
-        await $('a[data-test="nav-power-tools"]').click();
-        await $('input.icheck').click();
+        await mainPage.toolsPage.categorie.click();
+        await mainPage.toolsPage.powerTool.click();
+        await mainPage.toolsPage.drills.click();
 
-        const drill = await $('h5*=Cordless Drill 20V');
+        const drill = await mainPage.toolsPage.cordlessDrill20V;
         await drill.waitForDisplayed({ timeout: 7000 });
 
         const cordlessDrill = await drill.getText();
@@ -34,16 +39,16 @@ describe('shopping cart', () => {
 
     
     it("Deleting products", async () => {
-        await $('h5[data-test="product-name"]').click();
-        await $('button[data-test="add-to-cart"]').click();
+        await mainPage.toolsPage.selectedProduct.click();
+        await cartActions.cartButton.item('add').click();
 
-        const toast = await $('.toast-body');
+        const toast = await mainPage.toolsPage.cartDisplayed;
         await toast.waitForDisplayed({ reverse: true });
 
-        await $('a[data-test="nav-cart"]').click();
-        await $('a.btn.btn-danger').click();
+        await mainPage.toolsPage.goToCart.click();
+        await mainPage.toolsPage.removeItem.click();
 
-        const emptyMsg = await $('p.ng-star-inserted');
+        const emptyMsg = await mainPage.toolsPage.itemDeleted;
         await emptyMsg.waitForDisplayed({ timeout: 7000 });
 
         const messageReceived = await emptyMsg.getText();
@@ -51,10 +56,10 @@ describe('shopping cart', () => {
     });
 
     it("Adding favorites", async () => {
-        await $('h5[data-test="product-name"]').click();
-        await $('button[data-test="add-to-favorites"]').click();
+        await mainPage.toolsPage.selectedProduct.click();
+        await cartActions.cartButton.item('favorites').click();
 
-        const favorites = await $('#toast-container');
+        const favorites = await customer.userAccount.userUnauthorized;
         await favorites.waitForDisplayed({timeout: 7000 });
 
         const favorite = await favorites.getText();

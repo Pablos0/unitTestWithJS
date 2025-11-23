@@ -1,7 +1,12 @@
  import { assert, expect } from "chai";
  import MainPage from "../../po/pages/mainpage.page";
+ import Customer from "../../po/pages/customer.page";
+ import Cart from "../../po/pages/cart.page";
+
 
  const mainPage = new MainPage();
+ const customer = new Customer();
+ const cartActions = new Cart(); 
  
  describe('User account', () => { 
     beforeEach(async () => {
@@ -9,27 +14,27 @@
     });
 
     it("Customer log in",  async () => {
-        await $('a[data-test="nav-sign-in"]').click();
-        await $('input[data-test="login-submit"]').click();
+        await customer.userAccount.signIn.click();
+        await customer.userAccount.logIn.click();
 
-        const loginError = await $("#password-error");
+        const loginError = await customer.userAccount.passwordNeeded;
         expect(await loginError.getText()).to.equal("Password is required");
     });
     
     it("Login from cart page", async () => {
-        await $('h5[data-test="product-name"]').click();
-        await $('button[data-test="add-to-cart"]').click();
+        await mainPage.toolsPage.selectedProduct.click();
+        await cartActions.cartButton.item('add').click();
 
-        const toast = await $('#toast-container');
+        const toast = await mainPage.toolsPage.productInCart;
         await toast.waitForDisplayed({ timeout: 7000 });
 
-        const navCart = await $('a[data-test="nav-cart"]');
+        const navCart = await mainPage.toolsPage.goToCart;
         await navCart.click();
-        await $('[data-test="proceed-1"]').click();
-        const loginButton = await $('input[data-test="login-submit"]');
+        await  customer.userAccount.checkout.click();
+        const loginButton = await  customer.userAccount.logIn;
         await loginButton.click();
 
-        const errorMessage = await $('#email-error');
+        const errorMessage = await customer.userAccount.emailNeeded;
         await errorMessage.waitForDisplayed({ timeout: 7000 });
 
         const errMessage = await errorMessage.getText();
@@ -37,10 +42,10 @@
     });
 
     it ("language change to French", async () => {
-        await $('[data-test="language-select"]').click();
-        await $('[data-test="lang-fr"]').click();
+        await customer.userAccount.language.click();
+        await customer.userAccount.frLanguage.click();
 
-        const frLang = await $('a[data-test="nav-home"]');
+        const frLang = await customer.userAccount.home;
         await frLang.waitUntil(async function () {
             return (await this.getText()) === 'Accueil'
         }, {
