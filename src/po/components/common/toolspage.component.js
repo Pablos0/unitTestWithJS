@@ -12,7 +12,7 @@ class ToolsPage {
         return $('#toast-container');
     }
 
-    get categorie() {
+    get category() {
         return $('a.nav-link.dropdown-toggle');
     }
 

@@ -26,7 +26,7 @@ describe('shopping cart', () => {
     }) 
 
     it("Filtering tools", async () => {
-        await mainPage.toolsPage.categorie.click();
+        await mainPage.toolsPage.category.click();
         await mainPage.toolsPage.powerTool.click();
         await mainPage.toolsPage.drills.click();
 

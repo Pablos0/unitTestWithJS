@@ -54,6 +54,5 @@
 
         const newLanguage = await frLang.getText();
         assert.equal(newLanguage, 'Accueil');
-       // expect (await frLang.getText()).toEqual('Accueil');
     })
  }) 
