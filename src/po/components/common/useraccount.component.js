@@ -24,7 +24,7 @@ class UserAccount {
         return $('[data-test="language-select"]');
     }
 
-    get frLanguage() {
+    get frenchLanguageOption() {
         return $('[data-test="lang-fr"]');
     }
 

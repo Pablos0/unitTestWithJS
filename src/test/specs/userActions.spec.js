@@ -43,16 +43,16 @@
 
     it ("language change to French", async () => {
         await customer.userAccount.language.click();
-        await customer.userAccount.frLanguage.click();
+        await customer.userAccount.frenchLanguageOption.click();
 
-        const frLang = await customer.userAccount.home;
-        await frLang.waitUntil(async function () {
+        const frenchLanguage = await customer.userAccount.home;
+        await frenchLanguage.waitUntil(async function () {
             return (await this.getText()) === 'Accueil'
         }, {
             timeoutMsg: 'Expected text to change to "Accueil"'
         }); 
 
-        const newLanguage = await frLang.getText();
+        const newLanguage = await frenchLanguage.getText();
         assert.equal(newLanguage, 'Accueil');
     })
  }) 
