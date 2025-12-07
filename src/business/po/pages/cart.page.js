@@ -1,4 +1,4 @@
-import CartButtons from "../components/common/cart.component";
+import CartButtons from "../../../business/components/common/cart.component";
 
 class Cart {
 

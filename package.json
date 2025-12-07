@@ -16,6 +16,7 @@
     "@wdio/mocha-framework": "^9.20.0",
     "@wdio/spec-reporter": "^9.20.0",
     "chai": "^6.2.1",
-    "mocha": "^11.7.5"
+    "mocha": "^11.7.5",
+    "wdio-html-nice-reporter": "^8.1.7"
   }
 }

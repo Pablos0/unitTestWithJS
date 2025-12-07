@@ -1,4 +1,4 @@
-import ToolsPage from "../components/common/toolspage.component";
+import ToolsPage from "../../components/common/toolspage.component";
 
 class MainPage {
 

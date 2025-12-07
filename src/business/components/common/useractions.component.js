@@ -1,12 +1,5 @@
-class UserAccount {
+class UserActions {
 
-    get signIn() {
-        return $('a[data-test="nav-sign-in"]');
-    }
-
-    get logIn() {
-        return $('input[data-test="login-submit"]');
-    }
 
     get passwordNeeded() {
         return $("#password-error");
@@ -37,4 +30,4 @@ class UserAccount {
     }
 }
 
-export default UserAccount;
+export default UserActions;

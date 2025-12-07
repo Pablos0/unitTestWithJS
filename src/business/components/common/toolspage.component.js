@@ -21,7 +21,7 @@ class ToolsPage {
     }
 
     get drills() {
-        return $('input.icheck');
+     return $('input.icheck[data-test="category-01KBWW3F78FYTB18ZWK2P599Y6"]');
     }
 
     get goToCart() {
@@ -33,15 +33,15 @@ class ToolsPage {
     }
 
     get cartDisplayed() {
-        return $('.toast-body');
+        return $('svg[data-icon="cart-shopping"]');
     }
 
     get itemDeleted() {
         return $('p.ng-star-inserted');
     }
 
-    get cordlessDrill20V() {
-        return $('h5*=Cordless Drill 20V');
+    get cordlessDrill() {
+        return $('h5.card-title');
     }
 }
 

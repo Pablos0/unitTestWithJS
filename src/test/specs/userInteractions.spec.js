@@ -1,7 +1,8 @@
  import { assert, expect } from "chai";
- import MainPage from "../../po/pages/mainpage.page";
- import Customer from "../../po/pages/customer.page";
- import Cart from "../../po/pages/cart.page";
+ import MainPage from "../../business/po/pages/mainpage.page";
+ import Customer from "../../business/po/pages/customer.page";
+ import Cart from "../../business/po/pages/cart.page";
+ import waitHelper from "../../core/helpers/waitHelper.js";
 
 
  const mainPage = new MainPage();
@@ -14,38 +15,38 @@
     });
 
     it("Customer log in",  async () => {
-        await customer.userAccount.signIn.click();
-        await customer.userAccount.logIn.click();
+        await customer.signIn.click();
+        await customer.logIn.click();
 
-        const loginError = await customer.userAccount.passwordNeeded;
+        const loginError = await customer.userActions.passwordNeeded;
         expect(await loginError.getText()).to.equal("Password is required");
     });
-    
+
     it("Login from cart page", async () => {
         await mainPage.toolsPage.selectedProduct.click();
-        await cartActions.cartButton.item('add').click();
+        await cartActions.cartButton.addProduct.click();
 
         const toast = await mainPage.toolsPage.productInCart;
-        await toast.waitForDisplayed({ timeout: 7000 });
+        await waitHelper.waitForDisplayed(toast);
 
         const navCart = await mainPage.toolsPage.goToCart;
         await navCart.click();
-        await  customer.userAccount.checkout.click();
-        const loginButton = await  customer.userAccount.logIn;
+        await  customer.userActions.checkout.click();
+        const loginButton = await customer.logIn;
         await loginButton.click();
 
-        const errorMessage = await customer.userAccount.emailNeeded;
-        await errorMessage.waitForDisplayed({ timeout: 7000 });
+        const errorMessage = await customer.userActions.emailNeeded;
+        await waitHelper.waitForDisplayed(errorMessage);
 
         const errMessage = await errorMessage.getText();
         errMessage.should.equal('Email is required');
     });
 
     it ("language change to French", async () => {
-        await customer.userAccount.language.click();
-        await customer.userAccount.frenchLanguageOption.click();
+        await customer.userActions.language.click();
+        await customer.userActions.frenchLanguageOption.click();
 
-        const frenchLanguage = await customer.userAccount.home;
+        const frenchLanguage = await customer.userActions.home;
         await frenchLanguage.waitUntil(async function () {
             return (await this.getText()) === 'Accueil'
         }, {
