@@ -1,2 +1,7 @@
 node_modules
 .po 
+reports/
+html-reports/
+screenshots/
+reports/**
+!reports/.gitkeep
