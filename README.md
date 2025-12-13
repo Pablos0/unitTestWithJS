@@ -22,6 +22,14 @@ The ```spec.js``` files in the next path ```./test/specs```. There is one file f
 
 In <b>.gitignore</b> file is just ```node_modules``` folder. In ```wdio.conf.js``` is the required configuration for each test.
 
+## Classes
+
+### Components
+<b>ToolsPage</b>. This class contain funtions related with actions which may do the user in the store, such as: ```selectedProduct()```, ```productInCart()```, ```category()```, ```powerTool()```, ```drills()```, ```goToCart()```, ```removeItem()```, ```cartDisplayed()```, ```itemDeleted()``` and ``` cordlessDrill()```.<br><br>
+<b>Cart</b>. This class includes buttons to interact with the cart such as ```increaseQuantity()```, ```addProduct()``` and ```addToFavorites()```.<br><br>
+<b>UserActions</b>. This class includes some of the most commun functions in this page such as ```passwordNeeded()```, ```emailNeeded()```, ```checkout()```, ```language()```, ```frenchLanguageOption()```, ```home()``` and ```userUnauthorized()```.
+
+
 ## Configuration 
 
 The specs are saved under the names ```cart.spec.js``` and ```userActions.spec.js```, the configuration the wdio.config file is:
@@ -59,7 +67,6 @@ capabilities: [{
                 '--window-size=1920,1080'
             ]
         }},
-       //  { browserName: 'safari' } no tested by computer compability
     ]
 ```
 Chai is implemented as ``` import { expect, assert, should } from 'chai';``` and his functions: 
@@ -103,4 +110,4 @@ before: function (capabilities, specs) {
 The ```Assert``` allows insert an additional message in the last parameter for better understanding of the test. This option is also available with ```Expect```, however this is BDD, unlike assert, which is TDD. 
 Both ```Expect``` and ```Should``` are BDD, the main different between these two are th syntax. ```Should``` function required to be executed. 
 
-### Page Objects
+
