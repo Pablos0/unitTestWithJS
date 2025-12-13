@@ -1,6 +1,4 @@
 import { expect, assert, should } from 'chai';
-import {ReportAggregator } from 'wdio-html-nice-reporter';
-let reportAggregator;
 
 export const config = {
     //
@@ -145,22 +143,7 @@ export const config = {
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter
     reporters: [
-        ['spec', {
-            symbols: {
-                passed: '[PASS]',
-                failed: '[FAIL]'
-            },
-            addConsoleLogs: true,
-            showPreface: false,
-        }],
-        ["html-nice", {
-            outputDir: './reports/html-reports/',
-            filename: 'report.html',
-            reportTitle: 'Test Report Title',
-            linkScreenshots: true,
-            // showInBrowser: true, // This can be disruptive in CI environments
-            collapseTest: false
-        }]
+        
     ],
 
     // Options to be passed to Mocha.
@@ -183,17 +166,9 @@ export const config = {
      * @param {object} config wdio configuration object
      * @param {Array.<Object>} capabilities list of capabilities details
      */
-     onPrepare: function (config, capabilities) {
+    //  onPrepare: function (config, capabilities) {
 
-        reportAggregator = new ReportAggregator({
-            outputDir: './reports/html-reports/',
-            filename: 'master-report.html',
-            reportTitle: 'Master Report',
-            browserName: capabilities.browserName,
-            collapseTest: true
-        });
-        reportAggregator.clean();
-    },
+   // },
     /**
      * Gets executed before a worker process is spawned and can be used to initialize specific service
      * for that worker as well as modify runtime environments in an async fashion.
@@ -320,11 +295,9 @@ export const config = {
      * @param {Array.<Object>} capabilities list of capabilities details
      * @param {<Object>} results object containing test results
      */
-    onComplete: function(exitCode, config, capabilities, results) {
-        (async () => {
-            await reportAggregator.createReport();
-        }) ();
-    },
+    //onComplete: function(exitCode, config, capabilities, results) {
+
+  //  },
     /**
     * Gets executed when a refresh happens.
     * @param {string} oldSessionId session ID of the old session

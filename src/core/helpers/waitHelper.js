@@ -3,14 +3,14 @@ class helper {
 
     /**
      * @param {WebdriverIO.Element} element 
-     * @param {number} [timeout=7000]
+     * @param {number} [timeout=8000]
      * @param {boolean} [reverse=false] 
      * @param {string} [timeoutMsg] 
      */
-    async waitForDisplayed(element, { timeout = 7000, reverse = false, timeoutMsg } = {}) {
+    async waitForDisplayed(element, { timeout = 8000, reverse = false, timeoutMsg } = {}) {
         const options = { timeout, reverse };
         if (timeoutMsg) {
-            options.timeoutMsg = timeoutMsg;
+            options.timeout = timeoutMsg;
         }
         await element.waitForDisplayed(options);
     }

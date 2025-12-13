@@ -34,10 +34,10 @@ describe('shopping cart', () => {
         await waitHelper.waitForDisplayed(drill);
 
         const cordlessDrill = await drill.getText();
-        cordlessDrill.should.equal('Sheet Sander'); 
+        cordlessDrill.should.equal('Cordless Drill 20V'); 
     }); 
     
-    it("Deleting products", async () => {
+    it("Deleting products", async () => { 
         await mainPage.toolsPage.selectedProduct.click();
         await cartActions.cartButton.addProduct.click();
 
@@ -64,4 +64,4 @@ describe('shopping cart', () => {
         const favorite = await favorites.getText();
         expect(favorite).to.equal("Unauthorized, can not add product to your favorite list.");
     }) 
-})
+}) 
