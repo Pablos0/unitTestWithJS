@@ -1,33 +1,32 @@
+/* global $ */
 class UserActions {
+  get passwordNeeded() {
+    return $('#password-error');
+  }
 
+  get emailNeeded() {
+    return $('#email-error');
+  }
 
-    get passwordNeeded() {
-        return $("#password-error");
-    }
+  get checkout() {
+    return $('[data-test="proceed-1"]');
+  }
 
-    get emailNeeded() {
-        return $('#email-error');
-    }
+  get language() {
+    return $('[data-test="language-select"]');
+  }
 
-    get checkout() {
-        return $('[data-test="proceed-1"]');
-    }
+  get frenchLanguageOption() {
+    return $('[data-test="lang-fr"]');
+  }
 
-    get language() {
-        return $('[data-test="language-select"]');
-    }
+  get home() {
+    return $('a[data-test="nav-home"]');
+  }
 
-    get frenchLanguageOption() {
-        return $('[data-test="lang-fr"]');
-    }
-
-    get home() {
-        return $('a[data-test="nav-home"]');
-    }
-
-    get userUnauthorized() {
-        return $('#toast-container');
-    }
+  get userUnauthorized() {
+    return $('#toast-container');
+  }
 }
 
 export default UserActions;
