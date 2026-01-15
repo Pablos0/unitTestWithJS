@@ -1,14 +1,14 @@
-import ToolsPage from "../../components/common/toolspage.component";
+/* global browser */
+import ToolsPage from '../../components/common/toolspage.component';
 
 class MainPage {
+  constructor() {
+    this.toolsPage = new ToolsPage();
+  }
 
-    constructor() {
-        this.toolsPage = new ToolsPage();
-    }
-    
-    async open () {
-        await browser.url('https://practicesoftwaretesting.com/');
-    }
+  async open() {
+    await browser.url('https://practicesoftwaretesting.com/');
+  }
 }
 
-export default MainPage; 
+export default MainPage;

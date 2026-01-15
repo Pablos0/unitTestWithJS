@@ -1,19 +1,20 @@
 class helper {
-
-
-    /**
-     * @param {WebdriverIO.Element} element 
-     * @param {number} [timeout=8000]
-     * @param {boolean} [reverse=false] 
-     * @param {string} [timeoutMsg] 
-     */
-    async waitForDisplayed(element, { timeout = 8000, reverse = false, timeoutMsg } = {}) {
-        const options = { timeout, reverse };
-        if (timeoutMsg) {
-            options.timeout = timeoutMsg;
-        }
-        await element.waitForDisplayed(options);
+  /**
+   * @param {WebdriverIO.Element} element
+   * @param {number} [timeout=8000]
+   * @param {boolean} [reverse=false]
+   * @param {string} [timeoutMsg]
+   */
+  async waitForDisplayed(
+    element,
+    { timeout = 8000, reverse = false, timeoutMsg } = {}
+  ) {
+    const options = { timeout, reverse };
+    if (timeoutMsg) {
+      options.timeout = timeoutMsg;
     }
+    await element.waitForDisplayed(options);
+  }
 }
 
 export default new helper();

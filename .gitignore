@@ -1,2 +1,8 @@
 node_modules
 commonUtils.js
+.po 
+reports/
+html-reports/
+screenshots/
+reports/**
+!reports/.gitkeep

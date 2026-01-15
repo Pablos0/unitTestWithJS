@@ -1,18 +1,18 @@
-import UserActions from "../../components/common/useractions.component";
+/* global $ */
+import UserActions from '../../components/common/useractions.component';
 
 class Customer {
+  constructor() {
+    this.userActions = new UserActions();
+  }
 
-    constructor() {
-        this.userActions = new UserActions();
-    }
+  get signIn() {
+    return $('a[data-test="nav-sign-in"]');
+  }
 
-    get signIn() {
-        return $('a[data-test="nav-sign-in"]');
-    }
-
-    get logIn() {
-        return $('input[data-test="login-submit"]');
-    }
+  get logIn() {
+    return $('input[data-test="login-submit"]');
+  }
 }
 
 export default Customer;
