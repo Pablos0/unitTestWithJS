@@ -6,9 +6,9 @@
   "scripts": {
     "test": "wdio run src/test/config/wdio.conf.js",
     "report": "wdio run src/test/config/wdio.conf.js",
-    "prettier": "npx prettier . --write",
-    "eslint": "npx eslint",
-    "check": "npx prettier . --write && npx eslint"
+    "format": "npx prettier . --write",
+    "lint": "npx eslint",
+    "check-format": "npx prettier . --write && npx eslint"
   },
   "keywords": [],
   "author": "",
