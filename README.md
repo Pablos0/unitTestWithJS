@@ -78,6 +78,29 @@ before: function (capabilities, specs) {
      }
 ```
 
+Spec and HTML reports are configured. The script to run the HTML report is ```npm run report```. 
+
+```js
+reporters:
+        [['spec', {
+            symbols: {
+                passed: '[PASS]',
+                failed: '[FAIL]'
+            },
+            addConsoleLogs: true,
+            showPreface: false,
+        }],
+        ["html-nice", {
+            outputDir: './reports/html-reports/',
+            filename: 'report.html',
+            reportTitle: 'Test Report',
+            linkScreenshots: true,
+            showInBrowser: true,
+            collapseTest: false
+        }],
+    ],
+ ```
+
 ## Test Scenario
 ### Shopping cart
 
