@@ -1,0 +1,19 @@
+{
+  "name": "hellocucumber",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "cucumber-js",
+    "smoke": "cucumber-js --tags @smoke",
+    "wip": "cucumber-js --tags @wip",
+    "important": "cucumber-js --tags @important"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@cucumber/cucumber": "^12.5.0"
+  }
+}
