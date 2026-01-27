@@ -1,4 +1,4 @@
-/* global $ */
+import { $ } from '@wdio/globals';
 
 class CartButtons {
   get increaseQuantity() {

@@ -2,6 +2,7 @@
 import UserActions from '../../components/common/useractions.component';
 
 class Customer {
+  userActions: UserActions;
   constructor() {
     this.userActions = new UserActions();
   }
