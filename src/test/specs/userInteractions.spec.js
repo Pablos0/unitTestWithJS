@@ -1,12 +1,10 @@
 /* global describe, beforeEach, it */
 
 import { assert, expect } from 'chai';
-
 import MainPage from '../../business/po/pages/mainpage.page';
 import Customer from '../../business/po/pages/customer.page';
 import Cart from '../../business/po/pages/cart.page';
-import waitHelper from '../../core/helpers/waitHelper';
-import { beforeEach, describe, it } from 'node:test';
+import waitHelper from '../../core/helpers/waitHelper.js';
 
 const mainPage = new MainPage();
 const customer = new Customer();
@@ -21,7 +19,7 @@ describe('User account', () => {
     await customer.signIn.click();
     await customer.logIn.click();
 
-    const loginError = customer.userActions.passwordNeeded;
+    const loginError = await customer.userActions.passwordNeeded;
     expect(await loginError.getText()).to.equal('Password is required');
   });
 
@@ -29,27 +27,27 @@ describe('User account', () => {
     await mainPage.toolsPage.selectedProduct.click();
     await cartActions.cartButton.addProduct.click();
 
-    const toast = mainPage.toolsPage.productInCart;
-    await waitHelper.waitForDisplayed(toast as any);
+    const toast = await mainPage.toolsPage.productInCart;
+    await waitHelper.waitForDisplayed(toast);
 
-    const navCart = mainPage.toolsPage.goToCart;
+    const navCart = await mainPage.toolsPage.goToCart;
     await navCart.click();
     await customer.userActions.checkout.click();
-    const loginButton = customer.logIn;
+    const loginButton = await customer.logIn;
     await loginButton.click();
 
-    const errorMessage = customer.userActions.emailNeeded;
-    await waitHelper.waitForDisplayed(errorMessage as any);
+    const errorMessage = await customer.userActions.emailNeeded;
+    await waitHelper.waitForDisplayed(errorMessage);
 
     const errMessage = await errorMessage.getText();
-    expect(errMessage).to.equal('Email is required');
+    errMessage.should.equal('Email is required');
   });
 
   it('language change to French', async () => {
     await customer.userActions.language.click();
     await customer.userActions.frenchLanguageOption.click();
 
-    const frenchLanguage = customer.userActions.home;
+    const frenchLanguage = await customer.userActions.home;
     await frenchLanguage.waitUntil(
       async function () {
         return (await this.getText()) === 'Accueil';

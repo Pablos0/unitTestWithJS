@@ -1,9 +1,7 @@
-/* global $ */
-import { browser } from '@wdio/globals';
+/* global browser */
 import ToolsPage from '../../components/common/toolspage.component';
 
 class MainPage {
-  toolsPage: ToolsPage;
   constructor() {
     this.toolsPage = new ToolsPage();
   }

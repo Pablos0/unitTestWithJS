@@ -3,8 +3,7 @@ import { assert, expect } from 'chai';
 import MainPage from '../../business/po/pages/mainpage.page';
 import Cart from '../../business/po/pages/cart.page';
 import Customer from '../../business/po/pages/customer.page';
-import waitHelper from '../../core/helpers/waitHelper';
-import { describe, beforeEach, it } from 'node:test';
+import waitHelper from '../../core/helpers/waitHelper.js';
 
 const mainPage = new MainPage();
 const cartActions = new Cart();
@@ -19,11 +18,11 @@ describe('shopping cart', () => {
     await mainPage.toolsPage.selectedProduct.click();
     await cartActions.cartButton.addProduct.click();
 
-    const productAdded = mainPage.toolsPage.productInCart;
-    await waitHelper.waitForDisplayed(productAdded as any);
+    const productAdded = await mainPage.toolsPage.productInCart;
+    await waitHelper.waitForDisplayed(productAdded);
 
     const cartUpdated = await productAdded.getText();
-    expect(cartUpdated).equal('Product added to shopping cart.');
+    expect(cartUpdated).to.equal('Product added to shopping cart.');
   });
 
   it('Filtering tools', async () => {
@@ -31,11 +30,11 @@ describe('shopping cart', () => {
     await mainPage.toolsPage.powerTool.click();
     await mainPage.toolsPage.drills.click();
 
-    const drill = mainPage.toolsPage.cordlessDrill;
-    await waitHelper.waitForDisplayed(drill as any);
+    const drill = await mainPage.toolsPage.cordlessDrill;
+    await waitHelper.waitForDisplayed(drill);
 
     const cordlessDrill = await drill.getText();
-    expect(cordlessDrill).equal('Cordless Drill 20V');
+    cordlessDrill.should.equal('Cordless Drill 20V');
   });
 
   it('Deleting products', async () => {
@@ -43,13 +42,13 @@ describe('shopping cart', () => {
     await cartActions.cartButton.addProduct.click();
 
     const toast = await mainPage.toolsPage.cartDisplayed;
-    await waitHelper.waitForDisplayed(toast as any);
+    await waitHelper.waitForDisplayed(toast);
 
     await mainPage.toolsPage.goToCart.click();
     await mainPage.toolsPage.removeItem.click();
 
-    const productDeleted = mainPage.toolsPage.itemDeleted;
-    await waitHelper.waitForDisplayed(productDeleted as any);
+    const productDeleted = await mainPage.toolsPage.itemDeleted;
+    await waitHelper.waitForDisplayed(productDeleted);
 
     const messageReceived = await productDeleted.getText();
     assert.equal(messageReceived, 'The cart is empty. Nothing to display.');
@@ -59,8 +58,8 @@ describe('shopping cart', () => {
     await mainPage.toolsPage.selectedProduct.click();
     await cartActions.cartButton.addToFavorites.click();
 
-    const favorites = customer.userActions.userUnauthorized;
-    await waitHelper.waitForDisplayed(favorites as any);
+    const favorites = await customer.userActions.userUnauthorized;
+    await waitHelper.waitForDisplayed(favorites);
 
     const favorite = await favorites.getText();
     expect(favorite).to.equal(

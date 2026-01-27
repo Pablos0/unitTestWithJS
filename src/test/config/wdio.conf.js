@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
-import { options } from 'joi';
+import { expect, assert, should } from 'chai';
 import { ReportAggregator } from 'wdio-html-nice-reporter';
-
 let reportAggregator;
 
 export const config = {
@@ -26,9 +25,7 @@ export const config = {
   // The path of the spec files will be resolved relative from the directory of
   // of the config file unless it's absolute.
   //
-  specs: ['../../features/**/*.feature'],
-  
-
+  specs: ['../specs/**/*.js'],
   // Patterns to exclude.
   exclude: [
     // 'path/to/excluded/files'
@@ -126,23 +123,9 @@ export const config = {
   //
   // Make sure you have the wdio adapter package for the specific framework installed
   // before running any tests.
-  framework: 'cucumber',
-  // framework: 'mocha',
+  framework: 'mocha',
 
-  cucumberOpts: {
-    require: ['src/features/step_definitions/*.js'],
-    backtrace: true,
-    requireModule: [],
-    dryRun: false,
-    failFast: false,
-    snippets: true,
-    source: true,
-    strict: false,
-    tagExpression: '@smoke or @important or @wip',
-    timeout: 60000,
-    ignoreUndefinedDefinitions: false,
-  },
-
+  //
   // The number of times to retry the entire specfile when it fails as a whole
   specFileRetries: 1,
   //
@@ -176,7 +159,6 @@ export const config = {
         linkScreenshots: true,
         showInBrowser: true,
         collapseTest: false,
-        produceJson: true
       },
     ],
   ],
@@ -206,9 +188,7 @@ export const config = {
       outputDir: './reports/html-reports/',
       filename: 'master-report.html',
       reportTitle: 'Master Report',
-      // The 'capabilities' parameter in onPrepare is an array of all browser capabilities.
-      // Accessing 'capabilities.browserName' is incorrect and results in 'undefined'.
-      // This property can be removed for the master report.
+      browserName: capabilities.browserName,
       collapseTest: true,
     });
     reportAggregator.clean();
@@ -250,10 +230,11 @@ export const config = {
    * @param {Array.<String>} specs        List of spec file paths that are to be run
    * @param {object}         browser      instance of created browser/device session
    */
-  before: function (capabilities, specs) {
-    // The `expect` global is automatically available from @wdio/globals.
-    // The previous setup was importing and setting `chai`'s expect, which was
-    // not being used and could cause conflicts with WebdriverIO's built-in assertions.
+  before: function (_capabilities, _specs) {
+    /* global global */
+    global.expect = expect;
+    global.assert = assert;
+    global.should = should();
   },
   /**
    * Runs before a WebdriverIO command gets executed.
