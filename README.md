@@ -14,11 +14,40 @@ The project is develop with different frameworks such WDIO and CHAI. The cases t
 6. Deleting products from the shopping cart
 7. Adding tools to favorites
 
+## Scripts
+```js
+"scripts": {
+    "test": "wdio run ./src/test/config/wdio.conf.js",
+    "report": "wdio run src/test/config/wdio.conf.js",
+    "format": "npx prettier . --write",
+    "lint": "npx eslint",
+    "check-format": "npx prettier . --write && npx eslint",
+    "smoke": "wdio run ./src/test/config/wdio.conf.js --tags @smoke",
+    "wip": "wdio run ./src/test/config/wdio.conf.js --tags @wip",
+    "important": "wdio run ./src/test/config/wdio.conf.js --tags @important"
+  },
+```
+
+`npm test` run the test for the specs of features.
+<br>
+`npm run report` run command to create reports.
+<br>
+`npm run format` command to apply prettier in the project.
+<br>
+`npm run lint` command to apply lint in the project.
+<br>
+`npm run check-format` allow to apply lint and prettier at the same time.
+<br>
+`npm run smoke/wip/important` command to apply tags in the test features.
+
+
 ## Structure
 
-The tests scenarios are divide in two files called `shoppingCart1` and `customerAccount1` which are inside Features folder.
+The tests scenarios are divide in two files called `shoppingCart` and `customerAccount` which are inside Features folder.
 
 The `spec.js` files in the next path `./test/specs`. There is one file for each Feature file.
+
+The `features` are located in `./features/**/*.js`. Cucumber is used for the test of features.
 
 In <b>.gitignore</b> file is just `node_modules` folder. In `wdio.conf.js` is the required configuration for each test.
 
@@ -98,6 +127,28 @@ reporters:
             collapseTest: false
         }],
     ],
+```
+
+### Configuration of features
+
+The test scenarios are run using Gherkin and Cucumber. This is implemented as below: 
+
+```js
+framework: 'cucumber',
+
+  cucumberOpts: {
+    require: ['src/features/**/*.js'],
+    backtrace: true,
+    requireModule: [],
+    dryRun: false,
+    failFast: false,
+    snippets: true,
+    source: true,
+    strict: false,
+    tagExpression: '@smoke or @important or @wip',
+    timeout: 60000,
+    ignoreUndefinedDefinitions: false,
+  },
 ```
 
 ## Test Scenario
@@ -200,6 +251,8 @@ In case you need run both Prettier and EsLint, you can use `npm run check` comma
 <img src="./src/images/javascript.png" alt= "webdriverIOicon" width= "35px" height = "35px"><br>
 
 <img src="./src/images/webdriverio.png" alt= "webdriverIOicon" width= "35px" height = "35px"><br>
+
+<img src='./src/images/371-3711300_cucumber-js-logo-hd-png-download.png' alt= "Cucumber logo" width= "40px" height = "35px"><br>
 
 ## Notes
 

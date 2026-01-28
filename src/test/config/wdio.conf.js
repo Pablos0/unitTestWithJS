@@ -25,7 +25,7 @@ export const config = {
   // The path of the spec files will be resolved relative from the directory of
   // of the config file unless it's absolute.
   //
-  specs: ['../specs/**/*.js'],
+  specs: ['../../features/**/*.feature'],
   // Patterns to exclude.
   exclude: [
     // 'path/to/excluded/files'
@@ -123,8 +123,22 @@ export const config = {
   //
   // Make sure you have the wdio adapter package for the specific framework installed
   // before running any tests.
-  framework: 'mocha',
+  // framework: 'mocha',
+  framework: 'cucumber',
 
+  cucumberOpts: {
+    require: ['src/features/**/*.js'],
+    backtrace: true,
+    requireModule: [],
+    dryRun: false,
+    failFast: false,
+    snippets: true,
+    source: true,
+    strict: false,
+    tagExpression: '@smoke or @important or @wip',
+    timeout: 60000,
+    ignoreUndefinedDefinitions: false,
+  },
   //
   // The number of times to retry the entire specfile when it fails as a whole
   specFileRetries: 1,
@@ -159,6 +173,7 @@ export const config = {
         linkScreenshots: true,
         showInBrowser: true,
         collapseTest: false,
+        produceJson: true,
       },
     ],
   ],
