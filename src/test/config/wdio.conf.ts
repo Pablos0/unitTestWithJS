@@ -127,7 +127,7 @@ export const config = {
   framework: 'cucumber',
 
   cucumberOpts: {
-    require: ['src/features/**/*.js'],
+    require: ['src/business/**/*.ts'],
     backtrace: true,
     requireModule: [],
     dryRun: false,
@@ -135,7 +135,7 @@ export const config = {
     snippets: true,
     source: true,
     strict: false,
-    tagExpression: '@smoke or @important or @wip',
+    // tagExpression: '@smoke or @important or @wip',
     timeout: 60000,
     ignoreUndefinedDefinitions: false,
   },
@@ -172,7 +172,7 @@ export const config = {
         reportTitle: 'Test Report',
         linkScreenshots: true,
         showInBrowser: true,
-        collapseTest: false,
+        collapseTests: false,
         produceJson: true,
       },
     ],
@@ -204,7 +204,7 @@ export const config = {
       filename: 'master-report.html',
       reportTitle: 'Master Report',
       browserName: capabilities.browserName,
-      collapseTest: true,
+      collapseTests: true,
     });
     reportAggregator.clean();
   },
