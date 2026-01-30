@@ -56,7 +56,11 @@ export const config = {
     {
       browserName: 'chrome',
       'goog:chromeOptions': {
-        args: ['--headless', '--disable-gpu', '--window-size=1920,1080'],
+        args: ['--headless', '--disable-gpu', '--window-size=1920,1080',
+          '--disable-notifications',
+          '--disable-background-networking',
+          '--disable-features=PushMessaging,NotificationTriggers,BackgroundFetch'
+        ],
       },
     },
     {

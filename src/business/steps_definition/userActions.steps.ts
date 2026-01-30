@@ -52,7 +52,7 @@ const cartActions = new Cart();
         await navCart.click();
     });
 
-     Given(/^do click in "(.*)" button$/, async function (proceedCheckout) {
+     Given(/^do click in "(.*)" button$/, function (proceedCheckout) {
         proceedCheckout = customer.userActions.checkout.click();
     });
 
@@ -75,11 +75,11 @@ const cartActions = new Cart();
         console.log("user lenguage is " + userLanguage);
     });
 
-    When(/^user "(.*)" in button with the little globe$/, async function (click) {
+    When(/^user "(.*)" in button with the little globe$/, function (click) {
         click = customer.userActions.language.click();
     });
 
-    When(/^select "(.*)" as prefered language$/, async function (FR) {
+    When(/^select "(.*)" as prefered language$/, function (FR) {
         FR = customer.userActions.frenchLanguageOption.click();
     });
 

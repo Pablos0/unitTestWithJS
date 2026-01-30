@@ -4,7 +4,7 @@ import { Given, When, Then, BeforeAll } from '@wdio/cucumber-framework';
 import MainPage from '../po/pages/mainpage.page';
 import Cart from '../po/pages/cart.page';
 import Customer from '../po/pages/customer.page';
-import waitHelper from '../../core/helpers/waitHelper.js';
+import waitHelper from '../../core/helpers/waitHelper';
 
 const mainPage = new MainPage();
 const cartActions = new Cart();
@@ -14,8 +14,8 @@ const customer = new Customer();
                 await mainPage.open();
               });
 
-        Given(/^the user click on "(.*)" products$/, async function (tool) {
-          tool = "Thor Hammer";
+        Given(/^the user click on Thor Hammer products$/, async function () {
+          await mainPage.open();
           await mainPage.toolsPage.selectedProduct.click();
         });
 
@@ -90,15 +90,16 @@ const customer = new Customer();
           await cartActions.cartButton.addToFavorites.click();
         });
 
-        When(/^the user select "(.*)" tool$/, async function (combinationPliers) {
+        When(/^the user select "(.*)" tool$/,  function (combinationPliers) {
           combinationPliers = mainPage.toolsPage.selectedProduct.click();
         });
 
-        When(/^the user click on "(.*)" button$/, async function (addFavorite) {
+        When(/^the user click on "(.*)" button$/,  function (addFavorite) {
           addFavorite = cartActions.cartButton.addToFavorites.click();
         });
 
         Then(/^the "(.*)" message must appears$/, async function (expectedMessage) {
+          expectedMessage = "Unauthorized, can not add product to your favorite list.";
           const favorites = customer.userActions.userUnauthorized;
             await waitHelper.waitForDisplayed(favorites as any);
           

@@ -2,11 +2,11 @@
 
 class ToolsPage {
   get rootEl() {
-    return $('h5[data-test="product-name"]');
+    return $('[data-test="product-name"]');
   }
 
   get selectedProduct() {
-    return this.rootEl;
+    return this.rootEl; // h5.card-title
   }
 
   get productInCart() {

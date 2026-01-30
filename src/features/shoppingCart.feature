@@ -1,7 +1,7 @@
 Feature: Buying products from ToolShoop pages
 
 Scenario: Adding products to the shopping cart
-Given the user click on "Thor Hammer" products
+Given the user click on Thor Hammer products
 When select "+" button to add two hammers
 And click "Add to cart" button
 Then should see "Product added to the shopping cart" message at the top right of the pages

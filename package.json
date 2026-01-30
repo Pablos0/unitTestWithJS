@@ -4,14 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "wdio run ./src/test/config/wdio.conf.js",
-    "report": "wdio run src/test/config/wdio.conf.js",
+    "test": "wdio run ./src/test/config/wdio.conf.ts",
+    "report": "wdio run src/test/config/wdio.conf.ts",
     "format": "npx prettier . --write",
     "lint": "npx eslint",
     "check-format": "npx prettier . --write && npx eslint",
-    "smoke": "wdio run ./src/test/config/wdio.conf.js --tags @smoke",
-    "wip": "wdio run ./src/test/config/wdio.conf.js --tags @wip",
-    "important": "wdio run ./src/test/config/wdio.conf.js --tags @important"
+    "smoke": "wdio run ./src/test/config/wdio.conf.ts --tags @smoke",
+    "wip": "wdio run ./src/test/config/wdio.conf.ts --tags @wip",
+    "important": "wdio run ./src/test/config/wdio.conf.ts --tags @important"
   },
   "keywords": [],
   "author": "",
