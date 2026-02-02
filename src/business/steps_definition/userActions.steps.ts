@@ -1,102 +1,101 @@
 import assert from 'assert';
 import { expect } from 'chai';
-import { Given, When, Then, BeforeAll } from '@wdio/cucumber-framework';
+import { Given, When, Then } from '@wdio/cucumber-framework';
 import Customer from '../po/pages/customer.page';
 import MainPage from '../po/pages/mainpage.page';
 import Cart from '../po/pages/cart.page';
-import waitHelper from '../../core/helpers/waitHelper';
+import LogIn from '../po/pages/login.page';
 
 const mainPage = new MainPage();
 const customer = new Customer();
 const cartActions = new Cart();
+const logInPage = new LogIn();
 
+Given(/^the user navigates to Practing Software web page$/, async function () {
+  await mainPage.open();
+});
 
-    Given(/^user wants to log in to his customer profile$/, async function () {
-        await customer.signIn.click();
-        await customer.logIn.click();
-    });
+When(/^the user click on sign in button$/, async function () {
+  await customer.signIn();
+});
 
-    When(/^customer type his "(.*)" in Email address field$/, function (email) {
-        email = "jonh.doe@test.com"
-        console.log(email);
-    });
+When(
+  /^the user log in with email "(.*)" and password "(.*)"$/,
+  async function (email: string, password: string) {
+    await logInPage.logIn(email, password);
+  }
+);
 
-     When(/^leave Password field in blank$/, async function () {
-        await customer.signIn.click();
-        await customer.logIn.click();
-        
-        const loginError = customer.userActions.passwordNeeded;
-        expect(await loginError.getText()).to.equal('Password is required');
-    });
+When(/^press Login button$/, async function () {
+  await customer.logInSession();
+});
 
-    When(/^press "(.*)" button$/, async function (logIn) {
-        await customer.signIn.click();
-        logIn = customer.logIn.click();
-    });
+Then(
+  /^user should received "(.*)" message$/,
+  async function (loginError: string) {
+    const errorMssg = customer.userActions.invalidcredentials;
+    expect(await errorMssg.getText()).to.equal(loginError);
+  }
+);
 
-    Then(/^user should received "(.*)" message$/, async function (loginError) {
-        loginError = customer.userActions.passwordNeeded;
-        expect(await loginError.getText()).to.equal('Password is required');
-    });
+Given(/^the user add a combination pliers to the cart$/, async function () {
+  await mainPage.open();
+  await mainPage.toolsPage.selectedProduct();
+  await cartActions.cartButton.addToCart();
+});
 
+When(
+  /^do click in cart icon and Proceed to checkout button$/,
+  async function () {
+    await mainPage.toolsPage.cartPage();
+    await customer.userActions.proceedCheckout();
+  }
+);
 
-    Given(/^User click in "(.*)" icon$/, async function (cart) {
-        cart = mainPage.open();
-        await mainPage.toolsPage.selectedProduct.click();
-        await cartActions.cartButton.addProduct.click();
-        
-        const toast = mainPage.toolsPage.productInCart;
-        await waitHelper.waitForDisplayed(toast as any);
-        
-        const navCart = mainPage.toolsPage.goToCart;
-        await navCart.click();
-    });
+When(
+  /^the user click on log in with his email "(.*)", but no password$/,
+  async function (missingPassword: string) {
+    await logInPage.logInWithoutPwd(missingPassword);
+  }
+);
 
-     Given(/^do click in "(.*)" button$/, function (proceedCheckout) {
-        proceedCheckout = customer.userActions.checkout.click();
-    });
+Then(
+  /^should received "(.*)" error message$/,
+  async function (errorMessage: string) {
+    customer.userActions.passwordNeededMsg;
+    expect(errorMessage).to.equal('Password is required');
+  }
+);
 
-    When(/^User click on Login button "(.*)"$/, async function (loginButton) {
-        loginButton = customer.logIn;
-        await loginButton.click();
-    });
+Given(
+  /^the user needs to change the language page to french from the home page$/,
+  async function () {
+    await mainPage.open();
+  }
+);
 
-    Then(/^should received "(.*)" error message$/, async function (errorMessage) {
-        errorMessage = customer.userActions.emailNeeded;
-        await waitHelper.waitForDisplayed(errorMessage as any);
-        
-        const errMessage = await errorMessage.getText();
-        expect(errMessage).to.equal('Email is required');
-    });
+When(/^the user click in button with the little globe$/, async function () {
+  await customer.userActions.changeLang();
+});
 
+When(/^select FR as prefered language$/, async function () {
+  await customer.userActions.frenchLang();
+});
 
-    Given(/^the user speaks just French$/, function () {
-        const userLanguage = "French";
-        console.log("user lenguage is " + userLanguage);
-    });
+Then(/^the page should change the language to French$/, async function () {
+  await customer.userActions.changeLang();
+  await customer.userActions.frenchLang();
 
-    When(/^user "(.*)" in button with the little globe$/, function (click) {
-        click = customer.userActions.language.click();
-    });
+  const frenchLanguage = customer.userActions.home;
+  await frenchLanguage.waitUntil(
+    async function () {
+      return (await this.getText()) === 'Accueil';
+    },
+    {
+      timeoutMsg: 'Expected text to change to "Accueil"',
+    }
+  );
 
-    When(/^select "(.*)" as prefered language$/, function (FR) {
-        FR = customer.userActions.frenchLanguageOption.click();
-    });
-
-    Then(/^the page page should change the language to French$/, async function () {
-        await customer.userActions.language.click();
-        await customer.userActions.frenchLanguageOption.click();
-        
-            const frenchLanguage = customer.userActions.home;
-            await frenchLanguage.waitUntil(
-              async function () {
-                return (await this.getText()) === 'Accueil';
-              },
-              {
-                timeoutMsg: 'Expected text to change to "Accueil"',
-              }
-            );
-            
-            const newLanguage = await frenchLanguage.getText();
-            assert.equal(newLanguage, 'Accueil');
-    });
+  const newLanguage = await frenchLanguage.getText();
+  assert.equal(newLanguage, 'Accueil');
+});

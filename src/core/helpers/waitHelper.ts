@@ -1,7 +1,6 @@
 import { ElementArray } from 'webdriverio';
 
 class helper {
-
   /**
    * @param {WebdriverIO.Element<'async'>} element
    * @param {number} [timeout]
@@ -9,9 +8,9 @@ class helper {
 
   async waitForDisplayed<T extends ElementArray>(
     element: T[number],
-    { 
+    {
       timeout = 8000,
-      reverse = false, 
+      reverse = false,
       timeoutMsg,
     }: { timeout?: number; reverse?: boolean; timeoutMsg?: string } = {}
   ): Promise<void> {

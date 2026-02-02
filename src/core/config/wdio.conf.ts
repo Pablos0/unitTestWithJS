@@ -25,7 +25,11 @@ export const config = {
   // The path of the spec files will be resolved relative from the directory of
   // of the config file unless it's absolute.
   //
-  specs: ['../../features/**/*.feature'],
+  specs: [
+    '../../../features/**/*.feature',
+    '../../features/**/*.feature',
+    '../../business/**/*.feature',
+  ],
   // Patterns to exclude.
   exclude: [
     // 'path/to/excluded/files'
@@ -56,10 +60,13 @@ export const config = {
     {
       browserName: 'chrome',
       'goog:chromeOptions': {
-        args: ['--headless', '--disable-gpu', '--window-size=1920,1080',
+        args: [
+          '--headless',
+          '--disable-gpu',
+          '--window-size=1920,1080',
           '--disable-notifications',
           '--disable-background-networking',
-          '--disable-features=PushMessaging,NotificationTriggers,BackgroundFetch'
+          '--disable-features=PushMessaging,NotificationTriggers,BackgroundFetch',
         ],
       },
     },
@@ -139,7 +146,6 @@ export const config = {
     snippets: true,
     source: true,
     strict: false,
-    // tagExpression: '@smoke or @important or @wip',
     timeout: 60000,
     ignoreUndefinedDefinitions: false,
   },
@@ -202,7 +208,7 @@ export const config = {
    * @param {object} config wdio configuration object
    * @param {Array.<Object>} capabilities list of capabilities details
    */
-  onPrepare: function (config, capabilities) {
+  onPrepare: function (config: any, capabilities: { browserName: any }) {
     reportAggregator = new ReportAggregator({
       outputDir: './reports/html-reports/',
       filename: 'master-report.html',

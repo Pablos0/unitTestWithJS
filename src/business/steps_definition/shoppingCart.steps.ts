@@ -1,110 +1,107 @@
-import assert from 'assert';
 import { expect } from 'chai';
 import { Given, When, Then, BeforeAll } from '@wdio/cucumber-framework';
 import MainPage from '../po/pages/mainpage.page';
 import Cart from '../po/pages/cart.page';
 import Customer from '../po/pages/customer.page';
-import waitHelper from '../../core/helpers/waitHelper';
 
 const mainPage = new MainPage();
 const cartActions = new Cart();
 const customer = new Customer();
 
-        BeforeAll(async () => {
-                await mainPage.open();
-              });
+BeforeAll(async () => {
+  await mainPage.open();
+  await browser.setWindowSize(1920, 1080);
+});
 
-        Given(/^the user click on Thor Hammer products$/, async function () {
-          await mainPage.open();
-          await mainPage.toolsPage.selectedProduct.click();
-        });
+Given(/^the user click on "(.*)" product$/, async function (tool: string) {
+  await mainPage.open();
+  const thorHammer = $(`a.card*=${tool}`);
+  await thorHammer.waitForClickable({ timeout: 6000 });
+  await thorHammer.click();
+});
 
-        When(/^select "(.*)" button to add two hammers$/, async function (plus) {
-          plus = "+";
-          await cartActions.cartButton.addProduct.click();
-        });
+When(/^select plus button to select two hammers$/, async function () {
+  await cartActions.cartButton.increaseQty();
+});
 
-        When(/^click "(.*)" button$/, async function (addToCart) {
-          addToCart = "Add to cart";
-          await cartActions.cartButton.addProduct.click();
-        });
+When(/^click Add to cart button$/, async function () {
+  await cartActions.cartButton.addToCart();
+});
 
-        Then(/^should see "(.*)" message at the top right of the pages$/, async function (productAdded) {
-            productAdded = mainPage.toolsPage.productInCart;
-            await waitHelper.waitForDisplayed(productAdded as any);
-           
-            const cartUpdated = await productAdded.getText();
-            expect(cartUpdated).to.equal('Product added to shopping cart.');
-        });
+Then(/^should see "(.*)" error message$/, async function (errMessage: string) {
+  mainPage.toolsPage.productInCart;
+  expect(errMessage).to.equal('You can only have one Thor Hammer in the cart');
+});
 
+Given(
+  /^the user is looking for Drills and he is in the home page$/,
+  async function () {
+    await mainPage.open();
+  }
+);
 
-        Given(/^the user is looking for Drills$/, async function () {
-          await mainPage.toolsPage.category.click();
-          await mainPage.toolsPage.powerTool.click();
-          await mainPage.toolsPage.drills.click();
-         });
+When(/^the user do click on Categories and power tools$/, async function () {
+  await mainPage.toolsPage.toolsCategories();
+  await mainPage.toolsPage.powerTools();
+});
 
-        When(/^the user do click on "(.*)" and "(.*)"$/, function (categories, powerTools) {
-          categories = mainPage.toolsPage.category.click();
-          powerTools = mainPage.toolsPage.powerTool.click();
-         });
+When(/^the user select "(.*)" checkbox$/, async function (drill: string) {
+  await mainPage.toolsPage.drillsFilter();
+  expect(drill).to.equal('Drill');
+});
 
-        When(/^the user select "(.*)" checkbox$/, async function (drill) {
-            drill = mainPage.toolsPage.cordlessDrill;
-            await waitHelper.waitForDisplayed(drill as any);
-          
-            const cordlessDrill = await drill.getText();
-            expect(cordlessDrill).to.equal('Cordless Drill 20V');
-        });
+Then(
+  /^the first displayed drill must be "(.*)"$/,
+  async function (cordlessDrill: string) {
+    mainPage.toolsPage.cordlessDrill20V;
+    expect(cordlessDrill).to.equal('Cordless Drill 20V');
+  }
+);
 
-        Then(/^the page should "(.*)" automatically within the next 3 seconds$/, async function (drills) {
-          drills = mainPage.toolsPage.cordlessDrill;
-          await waitHelper.waitForDisplayed(drills as any);
-        });
+Given(/^the user add to the cart an incorrect tool$/, async function () {
+  await mainPage.toolsPage.selectedProduct();
+  await cartActions.cartButton.addToCart();
+});
 
+When(/^the user go to the cart page to delete the product$/, async function () {
+  await mainPage.toolsPage.cartPage();
+});
 
-        Given(/^the user is in "(.*)" page$/, async function (shoppigCart) {
-          shoppigCart = mainPage.toolsPage.cartDisplayed;
-          await waitHelper.waitForDisplayed(shoppigCart as any);
-        });
+When(/^he click on the X button to remove the product$/, async function () {
+  await mainPage.toolsPage.cartPage();
+  await mainPage.toolsPage.removeTool();
+});
 
-        When(/^he click on the "(.+)" button to remove the hammer$/, async function (deleteButton) {
-          deleteButton = mainPage.toolsPage.goToCart;
-          await deleteButton.waitForClickable();
-          await deleteButton.click();
-          await mainPage.toolsPage.removeItem.click();
-        });
+Then(
+  /^the shopping cart page should have the message "(.*)"$/,
+  async function (emptyCart: string) {
+    mainPage.toolsPage.cartEmptyMsg;
+    expect(emptyCart).to.equal('The cart is empty. Nothing to display.');
+  }
+);
 
-        Then(/^the shopping cart page should have the message "(.*)"$/, async function (emptyCart) {
-            emptyCart = mainPage.toolsPage.itemDeleted;
-            await waitHelper.waitForDisplayed(emptyCart as any);
-          
-            const messageReceived = await emptyCart.getText();
-            assert.equal(messageReceived, 'The cart is empty. Nothing to display.');
-        });
+Given(
+  /^the user is in Home Page and desired add a product to favorites$/,
+  async function () {
+    await mainPage.open();
+  }
+);
 
+When(/^the user select "(.*)" tool$/, async function (pliers: string) {
+  const combinationPliers = $(`a.card*=${pliers}`);
+  await combinationPliers.click();
+});
 
-        Given(/^the user is not allowed to Add Favorites$/, async function () {
-          await mainPage.open();
-          await mainPage.toolsPage.selectedProduct.click();
-          await cartActions.cartButton.addToFavorites.click();
-        });
+When(/^the user do click on Add to favorites button$/, async function () {
+  await cartActions.cartButton.addToFavorites();
+});
 
-        When(/^the user select "(.*)" tool$/,  function (combinationPliers) {
-          combinationPliers = mainPage.toolsPage.selectedProduct.click();
-        });
-
-        When(/^the user click on "(.*)" button$/,  function (addFavorite) {
-          addFavorite = cartActions.cartButton.addToFavorites.click();
-        });
-
-        Then(/^the "(.*)" message must appears$/, async function (expectedMessage) {
-          expectedMessage = "Unauthorized, can not add product to your favorite list.";
-          const favorites = customer.userActions.userUnauthorized;
-            await waitHelper.waitForDisplayed(favorites as any);
-          
-            const actualMessage = await favorites.getText();
-            expect(actualMessage).to.include(expectedMessage);
-        });
-
-        
+Then(
+  /^the "(.*)" message must appears$/,
+  async function (expectedMessage: string) {
+    customer.userActions.userUnauthorizedMsg;
+    expect(expectedMessage).to.equal(
+      'Unauthorized, can not add product to your favorite list.'
+    );
+  }
+);

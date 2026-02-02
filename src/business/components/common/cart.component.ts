@@ -1,16 +1,28 @@
 import { $ } from '@wdio/globals';
 
 class CartButtons {
-  get increaseQuantity() {
+  get increaseQuantityBtn() {
     return $('[data-test="increase-quantity"]');
   }
 
-  get addProduct() {
+  get addProductBtn() {
     return $('[data-test="add-to-cart"]');
   }
 
-  get addToFavorites() {
+  get addToFavoritesBtn() {
     return $('[data-test="add-to-favorites"]');
+  }
+
+  async increaseQty() {
+    await this.increaseQuantityBtn.click();
+  }
+
+  async addToCart() {
+    await this.addProductBtn.click();
+  }
+
+  async addToFavorites() {
+    await this.addProductBtn.click();
   }
 }
 
