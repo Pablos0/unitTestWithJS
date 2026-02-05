@@ -2,11 +2,11 @@ pipeline {
 
     agent any 
 
-    stages {
-
-        triggers {
+    triggers {
             cron('H */2 * * *')
         }
+
+    stages {
 
         stage("Checkout") {
             steps {
@@ -58,8 +58,9 @@ pipeline {
                 sh 'npm run build'
             }
         }
+    }
 
-        post {
+    post {
             always {
                 junit testResults: 'reports/junit/**/*.xml', allowEmptyResults: true
 
@@ -73,5 +74,4 @@ pipeline {
                 ])
             }
         } 
-    }
 }
