@@ -4,11 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "wdio run src/test/config/wdio.conf.js",
-    "report": "wdio run src/test/config/wdio.conf.js",
+    "test": "wdio run ./src/core/config/wdio.conf.ts",
+    "report": "wdio run src/core/config/wdio.conf.ts",
     "format": "npx prettier . --write",
     "lint": "npx eslint",
-    "check-format": "npx prettier . --write && npx eslint"
+    "check-format": "npx prettier . --write && npx eslint",
+    "smoke": "wdio run ./src/core/config/wdio.conf.ts --tags @smoke",
+    "wip": "wdio run ./src/core/config/wdio.conf.ts --tags @wip",
+    "important": "wdio run ./src/core/config/wdio.conf.ts --tags @important"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +19,9 @@
   "devDependencies": {
     "@cucumber/cucumber": "^12.2.0",
     "@eslint/js": "^9.39.2",
+    "@types/chai": "^5.2.3",
     "@wdio/cli": "^9.20.0",
+    "@wdio/cucumber-framework": "^9.23.2",
     "@wdio/local-runner": "^9.20.0",
     "@wdio/mocha-framework": "^9.20.0",
     "@wdio/spec-reporter": "^9.20.0",
@@ -26,6 +31,7 @@
     "globals": "^16.5.0",
     "mocha": "^11.7.5",
     "prettier": "3.7.4",
+    "tsx": "^4.21.0",
     "wdio-html-nice-reporter": "^8.1.7"
   }
 }

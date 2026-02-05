@@ -6,3 +6,4 @@ html-reports/
 screenshots/
 reports/**
 !reports/.gitkeep
+.images/
