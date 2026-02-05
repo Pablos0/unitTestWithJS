@@ -6,6 +6,12 @@ pipeline {
             cron('H */2 * * *')
         }
 
+        bat 'bundle install'
+
+        bat 'bundle exec rake build spec'
+
+        archive (includes: 'pkg/*.gem')
+
     stages {
 
         stage("Checkout") {
