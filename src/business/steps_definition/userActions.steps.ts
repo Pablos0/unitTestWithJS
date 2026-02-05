@@ -34,7 +34,7 @@ When(/^press LogIn button$/, async function () {
 Then(
   /^user should received "(.*)" message$/,
   async function (loginError: string) {
-    const errorMssg = await customer.userActions.invalidcredentials.getText();
+    const errorMssg = await customer.userActions.invalidCredentials.getText();
     expect(errorMssg).to.equal(loginError);
   }
 );

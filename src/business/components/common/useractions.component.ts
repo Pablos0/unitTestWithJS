@@ -8,7 +8,7 @@ class UserActions {
     return $('#email-error');
   }
 
-  get invalidcredentials() {
+  get invalidCredentials() {
     return $('.help-block');
   }
 
@@ -31,6 +31,11 @@ class UserActions {
   get userUnauthorizedMsg() {
     return $('#toast-container');
   }
+/*
+  async invalidCredentials() {
+    await this.invalidCredentialsMsg.waitForDisplayed();
+    await this.invalidCredentialsMsg.getText();
+  } */
 
   async proceedCheckout() {
     await this.checkout.click();
