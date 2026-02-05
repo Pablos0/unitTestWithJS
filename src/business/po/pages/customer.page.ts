@@ -15,11 +15,11 @@ class Customer {
     return $('input[data-test="login-submit"]');
   }
 
-  async signIn() {
+  async signIn(): Promise<void> {
     await this.signInBtn.click();
   }
 
-  async logInSession() {
+  async logInSession(): Promise<void> {
     await this.logInBtn.click();
   }
 }

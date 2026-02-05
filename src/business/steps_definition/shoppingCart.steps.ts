@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Given, When, Then, BeforeAll } from '@wdio/cucumber-framework';
+import { Given, When, Then, Before, BeforeAll } from '@wdio/cucumber-framework';
 import MainPage from '../po/pages/mainpage.page';
 import Cart from '../po/pages/cart.page';
 import Customer from '../po/pages/customer.page';
@@ -8,57 +8,49 @@ const mainPage = new MainPage();
 const cartActions = new Cart();
 const customer = new Customer();
 
-BeforeAll(async () => {
+Given(/^user is on the Practicing Software Testing website$/, async function () {
   await mainPage.open();
-  await browser.setWindowSize(1920, 1080);
 });
 
-Given(/^the user click on "(.*)" product$/, async function (tool: string) {
-  await mainPage.open();
+When(/^the user select the "(.*)" product$/, async function (tool: string) {
   const thorHammer = $(`a.card*=${tool}`);
+  await thorHammer.waitForDisplayed();
   await thorHammer.waitForClickable({ timeout: 6000 });
   await thorHammer.click();
 });
 
-When(/^select plus button to select two hammers$/, async function () {
+When(/^select plus option to select two hammers$/, async function () {
   await cartActions.cartButton.increaseQty();
 });
 
-When(/^click Add to cart button$/, async function () {
+When(/^select Add to cart button$/, async function () {
   await cartActions.cartButton.addToCart();
 });
 
 Then(/^should see "(.*)" error message$/, async function (errMessage: string) {
-  mainPage.toolsPage.productInCart;
-  expect(errMessage).to.equal('You can only have one Thor Hammer in the cart');
+  const receivedMessage = await mainPage.toolsPage.productInCart.getText();
+  expect(receivedMessage).to.equal(errMessage);
 });
 
-Given(
-  /^the user is looking for Drills and he is in the home page$/,
-  async function () {
-    await mainPage.open();
-  }
-);
 
-When(/^the user do click on Categories and power tools$/, async function () {
+When(/^the user go to Categories and power tools options at the navigation bar$/, async function () {
   await mainPage.toolsPage.toolsCategories();
   await mainPage.toolsPage.powerTools();
 });
 
-When(/^the user select "(.*)" checkbox$/, async function (drill: string) {
+When(/^the user select Drill checkbox$/, async function () {
   await mainPage.toolsPage.drillsFilter();
-  expect(drill).to.equal('Drill');
 });
 
 Then(
   /^the first displayed drill must be "(.*)"$/,
   async function (cordlessDrill: string) {
-    mainPage.toolsPage.cordlessDrill20V;
-    expect(cordlessDrill).to.equal('Cordless Drill 20V');
+    const displayedDrill = await mainPage.toolsPage.cordlessDrill.getText();
+    expect(displayedDrill).to.equal(cordlessDrill);
   }
 );
 
-Given(/^the user add to the cart an incorrect tool$/, async function () {
+When(/^the user add to the cart an incorrect tool$/, async function () {
   await mainPage.toolsPage.selectedProduct();
   await cartActions.cartButton.addToCart();
 });
@@ -67,7 +59,7 @@ When(/^the user go to the cart page to delete the product$/, async function () {
   await mainPage.toolsPage.cartPage();
 });
 
-When(/^he click on the X button to remove the product$/, async function () {
+When(/^he select the X button to remove the product$/, async function () {
   await mainPage.toolsPage.cartPage();
   await mainPage.toolsPage.removeTool();
 });
@@ -75,33 +67,27 @@ When(/^he click on the X button to remove the product$/, async function () {
 Then(
   /^the shopping cart page should have the message "(.*)"$/,
   async function (emptyCart: string) {
-    mainPage.toolsPage.cartEmptyMsg;
-    expect(emptyCart).to.equal('The cart is empty. Nothing to display.');
+    const cartEmptyMessage = await mainPage.toolsPage.cartEmptyMsg.getText();
+    expect(cartEmptyMessage).to.equal(emptyCart);
   }
 );
 
-Given(
-  /^the user is in Home Page and desired add a product to favorites$/,
-  async function () {
-    await mainPage.open();
-  }
-);
 
-When(/^the user select "(.*)" tool$/, async function (pliers: string) {
+When(/^the user wants to add "(.*)" tool to favorites$/, async function (pliers: string) {
   const combinationPliers = $(`a.card*=${pliers}`);
+  await combinationPliers.waitForDisplayed();
+  await combinationPliers.waitForClickable({ timeout: 6000 });
   await combinationPliers.click();
 });
 
-When(/^the user do click on Add to favorites button$/, async function () {
+When(/^the user request Add to favorites option$/, async function () {
   await cartActions.cartButton.addToFavorites();
 });
 
 Then(
   /^the "(.*)" message must appears$/,
   async function (expectedMessage: string) {
-    customer.userActions.userUnauthorizedMsg;
-    expect(expectedMessage).to.equal(
-      'Unauthorized, can not add product to your favorite list.'
-    );
+    const notAuthorizedMssge = await customer.userActions.userUnauthorizedMsg.getText();
+    expect(notAuthorizedMssge).to.equal(expectedMessage);
   }
 );

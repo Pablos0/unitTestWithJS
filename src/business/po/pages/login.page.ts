@@ -19,8 +19,8 @@ class LogIn {
     await this.logInBtn.click();
   }
 
-  async logInWithoutPwd(email: string) {
-    await this.email.setValue(email);
+  async logInWithoutPwd(emailTyped: string) {
+    await this.email.setValue(emailTyped);
     await this.logInBtn.click();
   }
 }

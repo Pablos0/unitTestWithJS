@@ -2,7 +2,7 @@
 
 class ToolsPage {
   get selectedProductBtn() {
-    return $('[data-test="product-name"]');
+    return $('h5[data-test="product-name"]');
   }
 
   get productInCart() {
@@ -37,31 +37,36 @@ class ToolsPage {
     return $('h5.*=Cordless Drill 20V');
   }
 
-  async selectedProduct() {
+  async selectedProduct(): Promise<void> {
+    await this.selectedProductBtn.waitForDisplayed();
     await this.selectedProductBtn.click();
   }
 
-  async toolsCategories() {
+  async toolsCategories(): Promise<void> {
     await this.category.click();
   }
 
-  async powerTools() {
+  async powerTools(): Promise<void> {
+    await this.powerToolSection.waitForDisplayed();
     await this.powerToolSection.click();
   }
 
-  async drillsFilter() {
+  async drillsFilter(): Promise<void> {
+    await this.drills.waitForDisplayed();
     await this.drills.click();
   }
 
-  async cartPage() {
+  async cartPage(): Promise<void> {
+    await this.goToCartBtn.waitForDisplayed();
     await this.goToCartBtn.click();
   }
 
-  async removeTool() {
+  async removeTool(): Promise<void> {
     await this.removeItem.click();
   }
 
-  async cordlessDrill20V() {
+  async cordlessDrill20V(): Promise<void> {
+    await this.cordlessDrill.waitForDisplayed();
     await this.cordlessDrill.click();
   }
 }

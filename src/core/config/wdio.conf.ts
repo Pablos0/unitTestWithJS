@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
-import { expect, assert, should } from 'chai';
+import { assert, should } from 'chai';
 import { ReportAggregator } from 'wdio-html-nice-reporter';
-let reportAggregator;
+let reportAggregator: ReportAggregator;
 
 export const config = {
   //
@@ -65,15 +65,15 @@ export const config = {
           '--disable-gpu',
           '--window-size=1920,1080',
           '--disable-notifications',
-          '--disable-background-networking',
-          '--disable-features=PushMessaging,NotificationTriggers,BackgroundFetch',
+          '--no-sandbox',
+          '--disable-dev-shm-usage',
         ],
       },
     },
     {
       browserName: 'firefox',
       'moz:firefoxOptions': {
-        args: ['--headless', '--disable-gpu', '--window-size=1920,1080'],
+        args: [ '--headless', '--disable-gpu', '--window-size=1920,1080'],
       },
     },
     //  { browserName: 'safari' } no tested by computer compability
@@ -113,7 +113,7 @@ export const config = {
   baseUrl: 'https://practicesoftwaretesting.com/', // 'http://localhost:8080',
   //
   // Default timeout for all waitFor* commands.
-  waitforTimeout: 10000,
+  waitforTimeout: 20000,
   //
   // Default timeout in milliseconds for request
   // if browser driver or grid doesn't send response
@@ -138,7 +138,9 @@ export const config = {
   framework: 'cucumber',
 
   cucumberOpts: {
-    require: ['src/business/**/*.ts'],
+    require: [
+      './src/business/steps_definition/*.ts'
+    ],
     backtrace: true,
     requireModule: [],
     dryRun: false,
@@ -208,12 +210,15 @@ export const config = {
    * @param {object} config wdio configuration object
    * @param {Array.<Object>} capabilities list of capabilities details
    */
-  onPrepare: function (config: any, capabilities: { browserName: any }) {
+  onPrepare: function (config: any, capabilities: any) {
+    const browserName = Array.isArray(capabilities)
+      ? capabilities.map((c) => c.browserName).join(', ')
+      : capabilities.browserName;
     reportAggregator = new ReportAggregator({
       outputDir: './reports/html-reports/',
       filename: 'master-report.html',
       reportTitle: 'Master Report',
-      browserName: capabilities.browserName,
+      browserName: browserName,
       collapseTests: true,
     });
     reportAggregator.clean();
@@ -255,11 +260,10 @@ export const config = {
    * @param {Array.<String>} specs        List of spec file paths that are to be run
    * @param {object}         browser      instance of created browser/device session
    */
-  before: function (_capabilities, _specs) {
+  before: function (_capabilities: any, _specs: any) {
     /* global global */
-    global.expect = expect;
-    global.assert = assert;
-    global.should = should();
+    (global as any).assert = assert;
+    (global as any).should = should();
   },
   /**
    * Runs before a WebdriverIO command gets executed.
@@ -305,6 +309,18 @@ export const config = {
   // },
 
   /**
+   * Function to be executed after a step (in Cucumber) starts.
+   * @param {Pick<Step, 'text' | 'keyword'>} step step details
+   * @param {Pick<Scenario, 'name'>} scenario scenario details
+   * @param {object} result result object containing error, duration, passed
+   */
+  afterStep: async function (_step: any, _scenario: any, { error }: any) {
+    if (error) {
+      await browser.takeScreenshot();
+    }
+  },
+
+  /**
    * Hook that gets executed after the suite has ended
    * @param {object} suite suite details
    */
@@ -344,7 +360,7 @@ export const config = {
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {<Object>} results object containing test results
    */
-  onComplete: function (_exitCode, _config, _capabilities, _results) {
+  onComplete: function (_exitCode: any, _config: any, _capabilities: any, _results: any) {
     (async () => {
       await reportAggregator.createReport();
     })();

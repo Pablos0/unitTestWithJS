@@ -13,16 +13,17 @@ class CartButtons {
     return $('[data-test="add-to-favorites"]');
   }
 
-  async increaseQty() {
+  async increaseQty(): Promise<void> {
     await this.increaseQuantityBtn.click();
   }
 
-  async addToCart() {
+  async addToCart(): Promise<void> {
+    await this.addProductBtn.waitForDisplayed(); 
     await this.addProductBtn.click();
   }
 
-  async addToFavorites() {
-    await this.addProductBtn.click();
+  async addToFavorites(): Promise<void> {
+    await this.addToFavoritesBtn.click();
   }
 }
 
