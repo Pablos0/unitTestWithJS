@@ -2,24 +2,84 @@ pipeline {
 
     agent any 
 
-    stage {
+    stages {
 
-        stage("build") {
+        triggers {
+            cron('H */2 * * *')
+        }
+
+        stage("Checkout") {
             steps {
-                echo 'building the application...'
+                checkout scm 
             }
         }
 
-        stage("testing") {
+        stage("Installing") {
+            when { branch 'jenkins' }
             steps {
-                echo 'preparing for CI...'
+                sh 'npm install'
             }
         }
 
-        stage("build") {
+        stage('Lint') {
+            when { branch 'jenkins' }
+            when { expression { fileExists('eslint.config.ts') || fileExists('.eslintrc') } }
             steps {
-                echo 'Validating CI...'
+                sh 'npm run lint'
             }
         }
+
+        stage("Typecheck") {
+            when { branch 'jenkins' }
+            when { expression { fileExists('tscofig.json') } }
+            steps {
+                sh 'npm run typecheck'
+            }
+        }
+
+        stage("Prettier") {
+            when { branch 'jenkins' }
+            when { expression { fileExists('.prettierrc') } }
+            steps {
+                sh 'npm run format'
+            }
+        }
+
+        stage("Prettier") {
+            when { branch 'jenkins' }
+            when { expression { fileExists('.prettierrc') } }
+            steps {
+                sh 'npm run format'
+            }
+        }
+
+        stage("Testing") {
+            when { branch 'jenkins' }
+            steps {
+                sh 'npm test'
+            }
+        }
+
+        stage('Build') {
+            when { branch 'jenkins' }
+            steps {
+                sh 'npm run build'
+            }
+        }
+
+        post {
+            always {
+                junit testResults: 'reports/junit/**/*.xml', allowEmptyResults: true
+
+                publishHTML(target: [
+                    reportName: 'WDIO HTML Report',
+                    reportDir: 'reports\\html',
+                    reportFiles: 'report.html',
+                    keepAll: true,
+                    alwaysLinkToLastBuild: true,
+                    allowMissing: true
+                ])
+            }
+        } 
     }
 }
