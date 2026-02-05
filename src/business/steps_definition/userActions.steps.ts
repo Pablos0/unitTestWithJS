@@ -83,3 +83,5 @@ Then(/^the page should change the language to French$/, async function () {
   const newLanguage = await frenchLanguage.getText();
   assert.equal(newLanguage, 'Accueil');
 });
+
+// This is a line of test
