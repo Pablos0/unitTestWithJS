@@ -3,6 +3,11 @@
     "target": "es6",
     "module": "NodeNext",
     "moduleResolution": "nodenext",
-    "types": ["node", "@wdio/globals/types", "@wdio/cucumber-framework", "@cucumber/cucumber"]
+    "types": [
+      "node",
+      "@wdio/globals/types",
+      "@wdio/cucumber-framework",
+      "@cucumber/cucumber"
+    ]
   }
 }

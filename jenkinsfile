@@ -1,0 +1,77 @@
+pipeline {
+
+    agent any 
+
+    stages {
+
+        triggers {
+            cron('H */2 * * *')
+        }
+
+        stage("Checkout") {
+            steps {
+                checkout scm 
+            }
+        }
+
+        stage("Installing") {
+            when { branch 'jenkins' }
+            steps {
+                sh 'npm install'
+            }
+        }
+
+        stage('Lint') {
+            when { branch 'jenkins' }
+            when { expression { fileExists('eslint.config.ts') || fileExists('.eslintrc') } }
+            steps {
+                sh 'npm run lint'
+            }
+        }
+
+        stage("Typecheck") {
+            when { branch 'jenkins' }
+            when { expression { fileExists('tscofig.json') } }
+            steps {
+                sh 'npm run typecheck'
+            }
+        }
+
+        stage("Prettier") {
+            when { branch 'jenkins' }
+            when { expression { fileExists('.prettierrc') } }
+            steps {
+                sh 'npm run format'
+            }
+        }
+
+        stage("Testing") {
+            when { branch 'jenkins' }
+            steps {
+                sh 'npm test'
+            }
+        }
+
+        stage('Build') {
+            when { branch 'jenkins' }
+            steps {
+                sh 'npm run build'
+            }
+        }
+
+        post {
+            always {
+                junit testResults: 'reports/junit/**/*.xml', allowEmptyResults: true
+
+                publishHTML(target: [
+                    reportName: 'WDIO HTML Report',
+                    reportDir: 'reports\\html',
+                    reportFiles: 'report.html',
+                    keepAll: true,
+                    alwaysLinkToLastBuild: true,
+                    allowMissing: true
+                ])
+            }
+        } 
+    }
+}

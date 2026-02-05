@@ -1,18 +1,22 @@
 /* global $ */
 class UserActions {
-  get passwordNeeded() {
+  get passwordNeededMsg() {
     return $('#password-error');
   }
 
-  get emailNeeded() {
+  get emailNeededMsg() {
     return $('#email-error');
+  }
+
+  get invalidCredentials() {
+    return $('.help-block');
   }
 
   get checkout() {
     return $('[data-test="proceed-1"]');
   }
 
-  get language() {
+  get languageBtn() {
     return $('[data-test="language-select"]');
   }
 
@@ -24,8 +28,25 @@ class UserActions {
     return $('a[data-test="nav-home"]');
   }
 
-  get userUnauthorized() {
+  get userUnauthorizedMsg() {
     return $('#toast-container');
+  }
+/*
+  async invalidCredentials() {
+    await this.invalidCredentialsMsg.waitForDisplayed();
+    await this.invalidCredentialsMsg.getText();
+  } */
+
+  async proceedCheckout() {
+    await this.checkout.click();
+  }
+
+  async changeLang() {
+    await this.languageBtn.click();
+  }
+
+  async frenchLang() {
+    await this.frenchLanguageOption.click();
   }
 }
 

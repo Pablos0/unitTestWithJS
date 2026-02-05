@@ -1,11 +1,11 @@
 import { ElementArray } from 'webdriverio';
 
 class helper {
-  // eslint-disable-next-line jsdoc/require-param
   /**
    * @param {WebdriverIO.Element<'async'>} element
    * @param {number} [timeout]
    */
+
   async waitForDisplayed<T extends ElementArray>(
     element: T[number],
     {

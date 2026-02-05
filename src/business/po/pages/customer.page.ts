@@ -7,12 +7,20 @@ class Customer {
     this.userActions = new UserActions();
   }
 
-  get signIn() {
+  get signInBtn() {
     return $('a[data-test="nav-sign-in"]');
   }
 
-  get logIn() {
+  get logInBtn() {
     return $('input[data-test="login-submit"]');
+  }
+
+  async signIn(): Promise<void> {
+    await this.signInBtn.click();
+  }
+
+  async logInSession(): Promise<void> {
+    await this.logInBtn.click();
   }
 }
 

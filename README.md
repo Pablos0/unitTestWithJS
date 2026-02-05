@@ -6,38 +6,66 @@ The project has been created as part of Automated Testing in JavaScript program 
 
 The project is develop with different frameworks such WDIO and CHAI. The cases to be tested are:
 
-1. A Customer log in to his account
-2. Customer John log in from his cart
-3. A new Customer registration
+1. A Customer try to log into his account with wrong credentials
+2. Customer try to log in from his cart without his password
+3. Language change to French
 4. Adding products to the shopping cart
 5. Filtering tools
 6. Deleting products from the shopping cart
 7. Adding tools to favorites
 
+## Scripts
+
+```js
+"scripts": {
+    "test": "wdio run ./src/test/config/wdio.conf.js",
+    "report": "wdio run src/test/config/wdio.conf.js",
+    "format": "npx prettier . --write",
+    "lint": "npx eslint",
+    "check-format": "npx prettier . --write && npx eslint",
+    "smoke": "wdio run ./src/test/config/wdio.conf.js --tags @smoke",
+    "wip": "wdio run ./src/test/config/wdio.conf.js --tags @wip",
+    "important": "wdio run ./src/test/config/wdio.conf.js --tags @important"
+  },
+```
+
+`npm test` run the test for the specs of features.
+<br>
+`npm run report` run command to create reports.
+<br>
+`npm run format` command to apply prettier in the project.
+<br>
+`npm run lint` command to apply lint in the project.
+<br>
+`npm run check-format` allow to apply lint and prettier at the same time.
+<br>
+`npm run smoke/wip/important` command to apply tags in the test features.
+
 ## Structure
 
-The tests scenarios are divide in two files called `shoppingCart1` and `customerAccount1` which are inside Features folder.
+The tests scenarios are divide in two files called `shoppingCart` and `customerAccount` which are inside Features folder.
 
-The `spec.js` files in the next path `./test/specs`. There is one file for each Feature file.
+The `steps.ts` files in the next path `./src/business/steps_definitions`. There is one file for each Feature file.
 
-In <b>.gitignore</b> file is just `node_modules` folder. In `wdio.conf.js` is the required configuration for each test.
+The `features` are located in `./features/**/*.ts`. Cucumber is used for the test of features.
 
 ## Classes
 
 ### Components
 
-<b>ToolsPage</b>. This class contain funtions related with actions which may do the user in the store, such as: `selectedProduct()`, `productInCart()`, `category()`, `powerTool()`, `drills()`, `goToCart()`, `removeItem()`, `cartDisplayed()`, `itemDeleted()` and ` cordlessDrill()`.<br><br>
-<b>Cart</b>. This class includes buttons to interact with the cart such as `increaseQuantity()`, `addProduct()` and `addToFavorites()`.<br><br>
-<b>UserActions</b>. This class includes some of the most commun functions in this page such as `passwordNeeded()`, `emailNeeded()`, `checkout()`, `language()`, `frenchLanguageOption()`, `home()` and `userUnauthorized()`.
+<b>ToolsPage</b>. This class contain funtions related with actions which may do the user in the store, such as: `selectedProduct()`, `productInCart()`, `toolsCategories()`, `powerTools()`, `drillsFilter()`, `cartPage()`, `removeTool()`, `cartEmptyMsg()` and ` cordlessDrill20V()`.<br><br>
+<b>Cart</b>. This class includes buttons to interact with the cart such as `increaseQty()`, `addToCart()` and `addToFavorites()`.<br><br>
+<b>UserActions</b>. This class includes some of the most commun functions in this page such as `passwordNeededMsg()`, `emailNeededMsg()`, `proceedCheckout()`, `changeLang()`, `frenchLang()`, `home()` and `userUnauthorizedMsg()`.
 
 ## Configuration
 
-The specs are saved under the names `cart.spec.js` and `userActions.spec.js`, the configuration the wdio.config file is:
+The steps are saved under the names `shopping.cart.steps.ts` and `userActions.teps.ts`, the configuration the wdio.config.ts file is:
 
 ```js
 specs: [
-        './test/specs/**/*.js',
-        './src/test/specs/**/*.js'
+        '../../../features/**/*.feature',
+    '../../features/**/*.feature',
+    '../../business/**/*.feature',
     ],
 ```
 
@@ -100,25 +128,46 @@ reporters:
     ],
 ```
 
+### Configuration of features
+
+The test scenarios are run using Gherkin and Cucumber. This is implemented as below:
+
+```js
+framework: 'cucumber',
+
+  cucumberOpts: {
+    require: ['src/features/**/*.js'],
+    backtrace: true,
+    requireModule: [],
+    dryRun: false,
+    failFast: false,
+    snippets: true,
+    source: true,
+    strict: false,
+    timeout: 60000,
+    ignoreUndefinedDefinitions: false,
+  },
+```
+
 ## Test Scenario
 
-### Shopping cart
+### Shopping Cart
 
-<b>Adding products to the cart</b>, the user is trying to add "Thor Hammer" to his cart, once the user do click in "add button", the cart icon should change with a number, depending of the amount of products in the cart.
+<b>Adding products to the shopping cart</b>, the user is trying to add "Thor Hammer" to his cart doing click to "Add to cart" button, and try to add a second hammer to the cart the error message "You can only have one Thor Hammer in the cart" will appear.
 
-<b>Filtering Tools</b>, the user is looking for a drill. To do this the user needs to do click in "Categories" option at the top right of the page and select "power tools". Once the tools are display, in the left side there are several options to filter the results, when the user select "drill" chebox, the page should reload within the next 3 seconds.
+<b>Filtering Tools</b>, the user is looking for a drill. To do this the user needs to do click in "Categories" option at the top right of the page and select "power tools". Once the tools are display, in the left side there are several options to filter the results, when the user select "drill" checkbox, the first tool to display must be "Cordless Drill 20V".
 
-<b>Deleting products from cart</b>, the user will try to delete his products in his cart. In the right side of the product should be an "X" button. When the user do click, in the top right side should appear the message "Product deleted" and the cart page will be refreshed automatically.
+<b>Deleting products from the shopping cart</b>, the user add to the cart an incorrect tool and will try to delete it. The user should go to the cart page doing click in the little cart icon at the top right of the page and in the right side of the product should be a "X" button. When the user do click, in the botton of the page should appear the message "The cart is empty. Nothing to display."
 
-<b>Adding favorites</b>, the user is trying to add a tool to favorite, but he is not allow to do it. When he do click in "Add to favorites", the "Unauthorized, can not add product to your favorite list." message must appears.
+<b>Adding tools to favorites</b>, the user is trying to add a tool to favorite. When the user select "Combination Pliers" tool and do click on Add to favorites button, An "Unauthorized, can not add product to your favorite list." message must appears.
 
-### Customer account
+### Customer Account
 
-<b>Customer login</b>, the user is trying to log in to his account typing "john@domain.com" as emal and as password "password123", then press enter. But, due the password is incorrect, an "Invalid email or password" error message must appears.
+<b>A Customer try to log into his account with wrong credentials</b>, the user is trying to log in to his account typing "john.doe@test.com" as his email and as password "And the user log in with email "john.doe@test.com" and password "12345x", then press enter. But, the password is incorrect, an "Invalid email or password" error message must appears.
 
-<b>Customer log in from cart</b>, user do click in the cart icon located in the top right of the page and the click in "Proceed to checkout", when the user do click in login button without any information, the message "Email is required" must be shown.
+<b>Customer try to log in from his cart without his password</b>, user do click in the cart icon located in the top right of the page and the click in "Proceed to checkout", when the user type his email, but forgot to type the password and do click in "log in" button the message "Password is required" must appear.
 
-<b>Language change</b>, as the user speaks another language, when he do click in th little globe button located in the top right of the page and select his prefered language, the page should be refreshed with the new language.
+<b>Language change to French</b>, as the user language is french, when he do click in th little globe button located in the top right of the page and select french as prefered language, the page should be refreshed with the new language.
 
 ## Formatters
 
@@ -176,7 +225,7 @@ You may run the command `npm run eslint`. Which script is configurated in `packa
 
 #### Notes
 
-To avoid conflict between Prettier and EsLint it is neccesary set up an extra configuration in `eslint.config.js` file.
+To avoid conflict between Prettier and EsLint it is neccesary set up an extra configuration in `eslint.config.mjs` file.
 
 ```js
 import eslintConfigPrettier from 'eslint-config-prettier';
@@ -201,9 +250,5 @@ In case you need run both Prettier and EsLint, you can use `npm run check` comma
 
 <img src="./src/images/webdriverio.png" alt= "webdriverIOicon" width= "35px" height = "35px"><br>
 
-## Notes
+<img src='./src/images/371-3711300_cucumber-js-logo-hd-png-download.png' alt= "Cucumber logo" width= "40px" height = "35px"><br>
 
-### Assert, Should and Expect
-
-The `Assert` allows insert an additional message in the last parameter for better understanding of the test. This option is also available with `Expect`, however this is BDD, unlike assert, which is TDD.
-Both `Expect` and `Should` are BDD, the main different between these two are th syntax. `Should` function required to be executed.

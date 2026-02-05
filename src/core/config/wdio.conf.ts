@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
-import { options } from 'joi';
+import { assert, should } from 'chai';
 import { ReportAggregator } from 'wdio-html-nice-reporter';
-
-let reportAggregator;
+let reportAggregator: ReportAggregator;
 
 export const config = {
   //
@@ -26,9 +25,11 @@ export const config = {
   // The path of the spec files will be resolved relative from the directory of
   // of the config file unless it's absolute.
   //
-  specs: ['../../features/**/*.feature'],
-  
-
+  specs: [
+    '../../../features/**/*.feature',
+    '../../features/**/*.feature',
+    '../../business/**/*.feature',
+  ],
   // Patterns to exclude.
   exclude: [
     // 'path/to/excluded/files'
@@ -59,13 +60,20 @@ export const config = {
     {
       browserName: 'chrome',
       'goog:chromeOptions': {
-        args: ['--headless', '--disable-gpu', '--window-size=1920,1080'],
+        args: [
+          '--headless',
+          '--disable-gpu',
+          '--window-size=1920,1080',
+          '--disable-notifications',
+          '--no-sandbox',
+          '--disable-dev-shm-usage',
+        ],
       },
     },
     {
       browserName: 'firefox',
       'moz:firefoxOptions': {
-        args: ['--headless', '--disable-gpu', '--window-size=1920,1080'],
+        args: [ '--headless', '--disable-gpu', '--window-size=1920,1080'],
       },
     },
     //  { browserName: 'safari' } no tested by computer compability
@@ -105,7 +113,7 @@ export const config = {
   baseUrl: 'https://practicesoftwaretesting.com/', // 'http://localhost:8080',
   //
   // Default timeout for all waitFor* commands.
-  waitforTimeout: 10000,
+  waitforTimeout: 20000,
   //
   // Default timeout in milliseconds for request
   // if browser driver or grid doesn't send response
@@ -126,11 +134,13 @@ export const config = {
   //
   // Make sure you have the wdio adapter package for the specific framework installed
   // before running any tests.
-  framework: 'cucumber',
   // framework: 'mocha',
+  framework: 'cucumber',
 
   cucumberOpts: {
-    require: ['src/features/step_definitions/*.js'],
+    require: [
+      './src/business/steps_definition/*.ts'
+    ],
     backtrace: true,
     requireModule: [],
     dryRun: false,
@@ -138,11 +148,10 @@ export const config = {
     snippets: true,
     source: true,
     strict: false,
-    tagExpression: '@smoke or @important or @wip',
     timeout: 60000,
     ignoreUndefinedDefinitions: false,
   },
-
+  //
   // The number of times to retry the entire specfile when it fails as a whole
   specFileRetries: 1,
   //
@@ -175,8 +184,8 @@ export const config = {
         reportTitle: 'Test Report',
         linkScreenshots: true,
         showInBrowser: true,
-        collapseTest: false,
-        produceJson: true
+        collapseTests: false,
+        produceJson: true,
       },
     ],
   ],
@@ -201,15 +210,16 @@ export const config = {
    * @param {object} config wdio configuration object
    * @param {Array.<Object>} capabilities list of capabilities details
    */
-  onPrepare: function (config, capabilities) {
+  onPrepare: function (config: any, capabilities: any) {
+    const browserName = Array.isArray(capabilities)
+      ? capabilities.map((c) => c.browserName).join(', ')
+      : capabilities.browserName;
     reportAggregator = new ReportAggregator({
       outputDir: './reports/html-reports/',
       filename: 'master-report.html',
       reportTitle: 'Master Report',
-      // The 'capabilities' parameter in onPrepare is an array of all browser capabilities.
-      // Accessing 'capabilities.browserName' is incorrect and results in 'undefined'.
-      // This property can be removed for the master report.
-      collapseTest: true,
+      browserName: browserName,
+      collapseTests: true,
     });
     reportAggregator.clean();
   },
@@ -250,10 +260,10 @@ export const config = {
    * @param {Array.<String>} specs        List of spec file paths that are to be run
    * @param {object}         browser      instance of created browser/device session
    */
-  before: function (capabilities, specs) {
-    // The `expect` global is automatically available from @wdio/globals.
-    // The previous setup was importing and setting `chai`'s expect, which was
-    // not being used and could cause conflicts with WebdriverIO's built-in assertions.
+  before: function (_capabilities: any, _specs: any) {
+    /* global global */
+    (global as any).assert = assert;
+    (global as any).should = should();
   },
   /**
    * Runs before a WebdriverIO command gets executed.
@@ -299,6 +309,18 @@ export const config = {
   // },
 
   /**
+   * Function to be executed after a step (in Cucumber) starts.
+   * @param {Pick<Step, 'text' | 'keyword'>} step step details
+   * @param {Pick<Scenario, 'name'>} scenario scenario details
+   * @param {object} result result object containing error, duration, passed
+   */
+  afterStep: async function (_step: any, _scenario: any, { error }: any) {
+    if (error) {
+      await browser.takeScreenshot();
+    }
+  },
+
+  /**
    * Hook that gets executed after the suite has ended
    * @param {object} suite suite details
    */
@@ -338,7 +360,7 @@ export const config = {
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {<Object>} results object containing test results
    */
-  onComplete: function (_exitCode, _config, _capabilities, _results) {
+  onComplete: function (_exitCode: any, _config: any, _capabilities: any, _results: any) {
     (async () => {
       await reportAggregator.createReport();
     })();

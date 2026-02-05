@@ -1,12 +1,8 @@
 /* global $ */
 
 class ToolsPage {
-  get rootEl() {
+  get selectedProductBtn() {
     return $('h5[data-test="product-name"]');
-  }
-
-  get selectedProduct() {
-    return this.rootEl;
   }
 
   get productInCart() {
@@ -17,7 +13,7 @@ class ToolsPage {
     return $('a.nav-link.dropdown-toggle');
   }
 
-  get powerTool() {
+  get powerToolSection() {
     return $('a[data-test="nav-power-tools"]');
   }
 
@@ -25,7 +21,7 @@ class ToolsPage {
     return $('label.*=Drill');
   }
 
-  get goToCart() {
+  get goToCartBtn() {
     return $('a[data-test="nav-cart"]');
   }
 
@@ -33,16 +29,45 @@ class ToolsPage {
     return $('a.btn.btn-danger');
   }
 
-  get cartDisplayed() {
-    return $('svg[data-icon="cart-shopping"]');
-  }
-
-  get itemDeleted() {
+  get cartEmptyMsg() {
     return $('p.ng-star-inserted');
   }
 
   get cordlessDrill() {
     return $('h5.*=Cordless Drill 20V');
+  }
+
+  async selectedProduct(): Promise<void> {
+    await this.selectedProductBtn.waitForDisplayed();
+    await this.selectedProductBtn.click();
+  }
+
+  async toolsCategories(): Promise<void> {
+    await this.category.click();
+  }
+
+  async powerTools(): Promise<void> {
+    await this.powerToolSection.waitForDisplayed();
+    await this.powerToolSection.click();
+  }
+
+  async drillsFilter(): Promise<void> {
+    await this.drills.waitForDisplayed();
+    await this.drills.click();
+  }
+
+  async cartPage(): Promise<void> {
+    await this.goToCartBtn.waitForDisplayed();
+    await this.goToCartBtn.click();
+  }
+
+  async removeTool(): Promise<void> {
+    await this.removeItem.click();
+  }
+
+  async cordlessDrill20V(): Promise<void> {
+    await this.cordlessDrill.waitForDisplayed();
+    await this.cordlessDrill.click();
   }
 }
 

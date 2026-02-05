@@ -1,4 +1,4 @@
-/* global $ */
+/* global browser */
 import { browser } from '@wdio/globals';
 import ToolsPage from '../../components/common/toolspage.component';
 
