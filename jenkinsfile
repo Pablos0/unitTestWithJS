@@ -45,14 +45,6 @@ pipeline {
             }
         }
 
-        stage("Prettier") {
-            when { branch 'jenkins' }
-            when { expression { fileExists('.prettierrc') } }
-            steps {
-                sh 'npm run format'
-            }
-        }
-
         stage("Testing") {
             when { branch 'jenkins' }
             steps {
