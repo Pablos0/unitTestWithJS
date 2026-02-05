@@ -17,7 +17,6 @@ pipeline {
         stage("Installing") {
             steps {
                 bat 'npm install'
-                bat 'bundle install'
             }
         }
 
