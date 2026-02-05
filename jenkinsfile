@@ -6,12 +6,6 @@ pipeline {
             cron('H */2 * * *')
         }
 
-        bat 'bundle install'
-
-        bat 'bundle exec rake build spec'
-
-        archive (includes: 'pkg/*.gem')
-
     stages {
 
         stage("Checkout") {
@@ -22,34 +16,35 @@ pipeline {
 
         stage("Installing") {
             steps {
-                sh 'npm install'
+                bat 'npm install'
+                bat 'bundle install'
             }
         }
 
         stage('Lint') {
             when { expression { fileExists('eslint.config.ts') || fileExists('.eslintrc') } }
             steps {
-                sh 'npm run lint'
+                bat 'npm run lint'
             }
         }
 
         stage("Typecheck") {
             when { expression { fileExists('tscofig.json') } }
             steps {
-                sh 'npm run typecheck'
+                bat 'npm run typecheck'
             }
         }
 
         stage("Prettier") {
             when { expression { fileExists('.prettierrc') } }
             steps {
-                sh 'npm run format'
+                bat 'npm run format'
             }
         }
 
         stage("Testing") {
             steps {
-                sh 'npm test'
+                bat 'npm test'
             }
         }
     }
