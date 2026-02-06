@@ -31,11 +31,6 @@ class UserActions {
   get userUnauthorizedMsg() {
     return $('#toast-container');
   }
-/*
-  async invalidCredentials() {
-    await this.invalidCredentialsMsg.waitForDisplayed();
-    await this.invalidCredentialsMsg.getText();
-  } */
 
   async proceedCheckout() {
     await this.checkout.click();
