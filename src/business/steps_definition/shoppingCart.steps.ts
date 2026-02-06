@@ -28,6 +28,7 @@ When(/^select Add to cart button$/, async function () {
 });
 
 Then(/^should see "(.*)" error message$/, async function (errMessage: string) {
+  await customer.userActions.userUnauthorizedMsg.waitForDisplayed();
   const receivedMessage = await mainPage.toolsPage.productInCart.getText();
   expect(receivedMessage).to.equal(errMessage);
 });
@@ -87,6 +88,7 @@ When(/^the user request Add to favorites option$/, async function () {
 Then(
   /^the "(.*)" message must appears$/,
   async function (expectedMessage: string) {
+    await customer.userActions.userUnauthorizedMsg.waitForDisplayed();
     const notAuthorizedMssge = await customer.userActions.userUnauthorizedMsg.getText();
     expect(notAuthorizedMssge).to.equal(expectedMessage);
   }

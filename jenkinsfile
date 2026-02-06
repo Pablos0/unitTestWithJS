@@ -2,11 +2,11 @@ pipeline {
 
     agent any 
 
-    stages {
-
-        triggers {
+    triggers {
             cron('H */2 * * *')
         }
+
+    stages {
 
         stage("Checkout") {
             steps {
@@ -15,54 +15,41 @@ pipeline {
         }
 
         stage("Installing") {
-            when { branch 'jenkins' }
             steps {
-                sh 'npm install'
+                bat 'npm install'
             }
         }
 
         stage('Lint') {
-            when { branch 'jenkins' }
             when { expression { fileExists('eslint.config.ts') || fileExists('.eslintrc') } }
             steps {
-                sh 'npm run lint'
+                bat 'npm run lint'
             }
         }
 
         stage("Typecheck") {
-            when { branch 'jenkins' }
             when { expression { fileExists('tscofig.json') } }
             steps {
-                sh 'npm run typecheck'
+                bat 'npm run typecheck'
             }
         }
 
         stage("Prettier") {
-            when { branch 'jenkins' }
             when { expression { fileExists('.prettierrc') } }
             steps {
-                sh 'npm run format'
+                bat 'npm run format'
             }
         }
 
         stage("Testing") {
-            when { branch 'jenkins' }
             steps {
-                sh 'npm test'
+                bat 'npm test'
             }
         }
+    }
 
-        stage('Build') {
-            when { branch 'jenkins' }
-            steps {
-                sh 'npm run build'
-            }
-        }
-
-        post {
+    post {
             always {
-                junit testResults: 'reports/junit/**/*.xml', allowEmptyResults: true
-
                 publishHTML(target: [
                     reportName: 'WDIO HTML Report',
                     reportDir: 'reports\\html',
@@ -73,5 +60,4 @@ pipeline {
                 ])
             }
         } 
-    }
 }
